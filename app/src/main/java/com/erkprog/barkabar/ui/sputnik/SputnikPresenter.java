@@ -3,7 +3,10 @@ package com.erkprog.barkabar.ui.sputnik;
 import android.util.Log;
 
 import com.erkprog.barkabar.data.entity.sputnik.SputnikFeed;
+import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
 import com.erkprog.barkabar.data.network.sputnikRepository.SputnikApi;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -29,11 +32,19 @@ public class SputnikPresenter implements SputnikContract.Presenter {
           if (isAttached()) {
             mView.dismissProgress();
             if (response.isSuccessful()) {
-              Log.d(TAG, "onResponse: starts");
-              Log.d(TAG, "onResponse: " + response.body().getChannel().getTitle());
-              Log.d(TAG, "onResponse: " + response.body().getChannel().getItems().get(0).getLink());
-              Log.d(TAG, "onResponse: " + response.body().getChannel().getItems().get(0).getImgUrl());
-              Log.d(TAG, "onResponse: " + response.body().getChannel().getItems().size());
+              if (response.body() != null && response.body().getChannel() != null) {
+
+                List<SputnikItem> data = response.body().getChannel().getItems();
+                if (data != null) {
+                  if (data.size() > 50) {
+                    data = data.subList(0, 50);
+                  }
+                  mView.showFeed(data);
+                } else {
+                  Log.d(TAG, "onResponse: List<SputnikItem> is null");
+                  mView.showMessage("Loading error");
+                }
+              }
             } else {
               Log.d(TAG, "onResponse: not successful");
             }
