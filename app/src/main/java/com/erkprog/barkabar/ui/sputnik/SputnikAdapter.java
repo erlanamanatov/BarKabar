@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
+import com.erkprog.barkabar.util.DateFormatter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -47,6 +48,15 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
               .error(R.drawable.ic_image_holder)
               .into(holder.mImageView);
         }
+
+        String date;
+        try {
+          date = DateFormatter.getFormattedDate(item.getCreated());
+        } catch (IllegalArgumentException e) {
+          date = "";
+        }
+
+        holder.created.setText(date);
       }
     }
   }
@@ -62,6 +72,7 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
     TextView title;
     TextView description;
     TextView category;
+    TextView created;
 
     public SputnikViewHolder(View itemView) {
       super(itemView);
@@ -70,6 +81,7 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
       title = itemView.findViewById(R.id.sp_item_title);
       description = itemView.findViewById(R.id.sp_item_description);
       category = itemView.findViewById(R.id.sp_item_category);
+      created = itemView.findViewById(R.id.sp_item_date);
     }
   }
 }
