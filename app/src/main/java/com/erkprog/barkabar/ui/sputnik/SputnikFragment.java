@@ -14,10 +14,11 @@ import android.widget.ProgressBar;
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
 import com.erkprog.barkabar.data.network.sputnikRepository.SputnikClient;
+import com.erkprog.barkabar.ui.BaseFragment;
 
 import java.util.List;
 
-public class SputnikFragment extends Fragment implements SputnikContract.View {
+public class SputnikFragment extends BaseFragment implements SputnikContract.View {
 
   SputnikContract.Presenter mPresenter;
   SputnikAdapter mAdapter;
@@ -82,5 +83,10 @@ public class SputnikFragment extends Fragment implements SputnikContract.View {
   @Override
   public void dismissProgress() {
     mProgressBar.setVisibility(View.GONE);
+  }
+
+  @Override
+  public String getTitle() {
+    return "Sputnik.kg";
   }
 }
