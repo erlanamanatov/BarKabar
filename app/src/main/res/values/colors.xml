@@ -6,4 +6,5 @@
 
   <color name="mainAttributes">#000</color>
   <color name="sputnikItemColor">#f2ba2e</color>
+  <color name="sputnikBackground">#ffe399</color>
 </resources>

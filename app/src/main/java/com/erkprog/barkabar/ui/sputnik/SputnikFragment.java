@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
@@ -21,6 +22,7 @@ public class SputnikFragment extends Fragment implements SputnikContract.View {
   SputnikContract.Presenter mPresenter;
   SputnikAdapter mAdapter;
   RecyclerView mRecyclerView;
+  ProgressBar mProgressBar;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,6 +34,8 @@ public class SputnikFragment extends Fragment implements SputnikContract.View {
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View v = inflater.inflate(R.layout.fragment_sputnik, container, false);
+    mProgressBar = v.findViewById(R.id.sputnik_progress_bar);
+    dismissProgress();
     initRecyclerView(v);
     return v;
   }
@@ -72,11 +76,11 @@ public class SputnikFragment extends Fragment implements SputnikContract.View {
 
   @Override
   public void showProgress() {
-
+    mProgressBar.setVisibility(View.VISIBLE);
   }
 
   @Override
   public void dismissProgress() {
-
+    mProgressBar.setVisibility(View.GONE);
   }
 }
