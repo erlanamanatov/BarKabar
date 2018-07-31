@@ -10,7 +10,7 @@ import java.util.List;
 public class KloopFeed {
 
   @Path("channel")
-  @ElementList(name = "item", required = false)
+  @ElementList(name = "item",inline = true, required = false)
   List<KloopItem> mData;
 
   public List<KloopItem> getData() {

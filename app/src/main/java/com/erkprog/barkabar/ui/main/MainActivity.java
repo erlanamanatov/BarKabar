@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.erkprog.barkabar.R;
+import com.erkprog.barkabar.ui.kloop.KloopFragment;
 import com.erkprog.barkabar.ui.sputnik.SputnikFragment;
 
 
@@ -23,6 +24,8 @@ public class MainActivity extends AppCompatActivity {
     ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
     adapter.addFragment(new SputnikFragment());
+    adapter.addFragment(new KloopFragment());
+
     viewPager.setAdapter(adapter);
 
     TabLayout tabLayout = findViewById(R.id.main_tabs);

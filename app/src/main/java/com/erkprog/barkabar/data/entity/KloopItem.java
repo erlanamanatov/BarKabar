@@ -15,10 +15,10 @@ public class KloopItem {
   @Element(name = "pubDate", required = false)
   private String createdDate;
 
-  @Element(name = "dc:creator", required = false)
+  @Element(name = "creator",data = true, required = false)
   private String createdBy;
 
-  @Element(name = "description", required = false)
+  @Element(name = "description", data = true, required = false)
   private String description;
 
   public String getTitle() {
