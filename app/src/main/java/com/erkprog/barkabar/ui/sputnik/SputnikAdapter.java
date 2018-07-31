@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
+import com.erkprog.barkabar.ui.OnClickListener;
 import com.erkprog.barkabar.util.DateFormatter;
 import com.squareup.picasso.Picasso;
 
@@ -18,9 +19,11 @@ import java.util.List;
 public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikViewHolder> {
 
   private List<SputnikItem> mData;
+  private OnClickListener<SputnikItem> mlistener;
 
-  public SputnikAdapter(List<SputnikItem> data) {
+  SputnikAdapter(List<SputnikItem> data, OnClickListener<SputnikItem> listener) {
     mData = data;
+    mlistener = listener;
   }
 
   @NonNull
@@ -35,7 +38,7 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
   @Override
   public void onBindViewHolder(@NonNull SputnikViewHolder holder, int position) {
     if (mData != null) {
-      SputnikItem item = mData.get(position);
+      final SputnikItem item = mData.get(position);
 
       if (item != null) {
         holder.title.setText(item.getTitle());
@@ -57,6 +60,16 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
         }
 
         holder.created.setText(date);
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            if (mlistener != null) {
+              mlistener.onItemClick(item);
+            }
+          }
+        });
+
       }
     }
   }

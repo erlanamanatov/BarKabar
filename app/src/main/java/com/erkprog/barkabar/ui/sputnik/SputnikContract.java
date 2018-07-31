@@ -11,10 +11,14 @@ public class SputnikContract {
   interface View extends BaseView {
 
     void showFeed(List<SputnikItem> items);
+
+    void openArticle(String link);
   }
 
   interface Presenter extends BasePresenter<View> {
 
     void loadData();
+
+    void onItemClick(SputnikItem item);
   }
 }

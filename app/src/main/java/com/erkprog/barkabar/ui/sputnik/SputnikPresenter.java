@@ -66,6 +66,11 @@ public class SputnikPresenter implements SputnikContract.Presenter {
   }
 
   @Override
+  public void onItemClick(SputnikItem item) {
+    mView.openArticle(item.getLink());
+  }
+
+  @Override
   public boolean isAttached() {
     return mView != null;
   }
