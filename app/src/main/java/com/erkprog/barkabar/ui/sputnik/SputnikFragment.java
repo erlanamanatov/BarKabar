@@ -1,7 +1,5 @@
 package com.erkprog.barkabar.ui.sputnik;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -18,6 +16,7 @@ import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
 import com.erkprog.barkabar.data.network.sputnikRepository.SputnikClient;
 import com.erkprog.barkabar.ui.BaseFragment;
 import com.erkprog.barkabar.ui.OnClickListener;
+import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.util.List;
 
@@ -102,7 +101,6 @@ public class SputnikFragment extends BaseFragment implements SputnikContract.Vie
 
   @Override
   public void openArticle(String link) {
-    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(link));
-    startActivity(intent);
+    new FinestWebView.Builder(getActivity()).show(link);
   }
 }
