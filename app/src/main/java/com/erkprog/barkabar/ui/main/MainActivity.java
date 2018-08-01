@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
     ViewPager viewPager = findViewById(R.id.view_pager);
     ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-    adapter.addFragment(new SputnikFragment());
     adapter.addFragment(new KloopFragment());
+    adapter.addFragment(new SputnikFragment());
 
     viewPager.setAdapter(adapter);
 
