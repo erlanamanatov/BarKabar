@@ -3,6 +3,7 @@ package com.erkprog.barkabar.ui.kloop;
 import android.util.Log;
 
 import com.erkprog.barkabar.data.entity.KloopFeed;
+import com.erkprog.barkabar.data.entity.KloopItem;
 import com.erkprog.barkabar.data.network.kloopRepository.KloopApi;
 
 import retrofit2.Call;
@@ -62,5 +63,10 @@ public class KloopPresenter implements KloopContract.Presenter {
   @Override
   public void unBind() {
     mView = null;
+  }
+
+  @Override
+  public void onItemClick(KloopItem item) {
+    mView.showArticle(item.getLink());
   }
 }

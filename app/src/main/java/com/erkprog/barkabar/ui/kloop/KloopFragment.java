@@ -18,8 +18,10 @@ import com.erkprog.barkabar.data.entity.KloopItem;
 import com.erkprog.barkabar.data.network.kloopRepository.KloopApi;
 import com.erkprog.barkabar.data.network.kloopRepository.KloopClient;
 import com.erkprog.barkabar.ui.BaseFragment;
+import com.erkprog.barkabar.ui.OnClickListener;
 import com.erkprog.barkabar.util.DateFormatter;
 import com.erkprog.barkabar.util.Utils;
+import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.util.List;
 
@@ -27,7 +29,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class KloopFragment extends BaseFragment implements KloopContract.View {
+public class KloopFragment extends BaseFragment implements KloopContract.View,
+    OnClickListener<KloopItem> {
 
   private KloopContract.Presenter mPresenter;
   private RecyclerView mRecyclerView;
@@ -67,8 +70,13 @@ public class KloopFragment extends BaseFragment implements KloopContract.View {
 
   @Override
   public void showFeed(List<KloopItem> data) {
-    mAdapter = new KloopAdapter(data);
+    mAdapter = new KloopAdapter(data, this);
     mRecyclerView.setAdapter(mAdapter);
+  }
+
+  @Override
+  public void showArticle(String url) {
+    new FinestWebView.Builder(getActivity()).show(url);
   }
 
   @Override
@@ -95,5 +103,10 @@ public class KloopFragment extends BaseFragment implements KloopContract.View {
   public void onDestroy() {
     super.onDestroy();
     mPresenter.unBind();
+  }
+
+  @Override
+  public void onItemClick(KloopItem item) {
+    mPresenter.onItemClick(item);
   }
 }

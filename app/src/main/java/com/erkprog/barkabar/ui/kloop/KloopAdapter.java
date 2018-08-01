@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.KloopItem;
+import com.erkprog.barkabar.ui.OnClickListener;
 import com.erkprog.barkabar.util.DateFormatter;
 import com.erkprog.barkabar.util.Utils;
 
@@ -17,9 +18,11 @@ import java.util.List;
 public class KloopAdapter extends RecyclerView.Adapter<KloopAdapter.KloopViewHolder> {
 
   private List<KloopItem> mData;
+  private OnClickListener<KloopItem> mListener;
 
-  KloopAdapter(List<KloopItem> data) {
+  KloopAdapter(List<KloopItem> data, OnClickListener<KloopItem> listener) {
     mData = data;
+    mListener = listener;
   }
 
   @NonNull
@@ -31,7 +34,7 @@ public class KloopAdapter extends RecyclerView.Adapter<KloopAdapter.KloopViewHol
 
   @Override
   public void onBindViewHolder(@NonNull KloopViewHolder holder, int position) {
-    KloopItem item = mData.get(position);
+    final KloopItem item = mData.get(position);
 
     if (item != null) {
       holder.title.setText(item.getTitle());
@@ -40,6 +43,15 @@ public class KloopAdapter extends RecyclerView.Adapter<KloopAdapter.KloopViewHol
       holder.description.setText(description != null ? Utils.getKloopDescription(description) : "");
       String date = item.getCreatedDate();
       holder.createdDate.setText(DateFormatter.getFormattedDate(date));
+
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          if (mListener != null) {
+            mListener.onItemClick(item);
+          }
+        }
+      });
     }
 
   }

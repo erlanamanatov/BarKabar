@@ -11,9 +11,12 @@ class KloopContract {
   interface View extends BaseView {
 
     void showFeed(List<KloopItem> data);
+
+    void showArticle(String url);
   }
 
   interface Presenter extends BasePresenter<View> {
 
+    void onItemClick(KloopItem item);
   }
 }
