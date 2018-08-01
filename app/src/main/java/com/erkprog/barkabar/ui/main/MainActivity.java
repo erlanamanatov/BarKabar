@@ -15,6 +15,8 @@ import com.erkprog.barkabar.ui.sputnik.SputnikFragment;
 public class MainActivity extends AppCompatActivity {
   private static final String TAG = "MainActivity";
 
+  TabLayout mTabLayout;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -28,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
     viewPager.setAdapter(adapter);
 
-    TabLayout tabLayout = findViewById(R.id.main_tabs);
-    tabLayout.setupWithViewPager(viewPager);
+    mTabLayout = findViewById(R.id.main_tabs);
+    mTabLayout.setupWithViewPager(viewPager);
+    mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
   }
 }

@@ -1,8 +1,10 @@
 package com.erkprog.barkabar.ui.kloop;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,6 +21,7 @@ import com.erkprog.barkabar.data.network.kloopRepository.KloopApi;
 import com.erkprog.barkabar.data.network.kloopRepository.KloopClient;
 import com.erkprog.barkabar.ui.BaseFragment;
 import com.erkprog.barkabar.ui.OnClickListener;
+import com.erkprog.barkabar.ui.main.MainActivity;
 import com.erkprog.barkabar.util.DateFormatter;
 import com.erkprog.barkabar.util.Utils;
 import com.thefinestartist.finestwebview.FinestWebView;
@@ -76,7 +79,11 @@ public class KloopFragment extends BaseFragment implements KloopContract.View,
 
   @Override
   public void showArticle(String url) {
-    new FinestWebView.Builder(getActivity()).show(url);
+    new FinestWebView.Builder(requireContext()).show(url);
+  }
+
+  public static KloopFragment newInstance() {
+    return new KloopFragment();
   }
 
   @Override

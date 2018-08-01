@@ -14,7 +14,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
   private ArrayList<BaseFragment> mFragments;
 
 
-  public ViewPagerAdapter(FragmentManager fm) {
+  ViewPagerAdapter(FragmentManager fm) {
     super(fm);
     mFragments = new ArrayList<>();
   }
@@ -38,4 +38,5 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
   public CharSequence getPageTitle(int position) {
     return mFragments.get(position).getTitle();
   }
+
 }
