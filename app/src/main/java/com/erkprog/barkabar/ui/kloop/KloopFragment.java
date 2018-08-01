@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.KloopFeed;
@@ -20,13 +21,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class KloopFragment extends BaseFragment {
+public class KloopFragment extends BaseFragment implements KloopContract.View {
+
+  private KloopContract.Presenter mPresenter;
 
   private static final String TAG = "KloopFragment";
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mPresenter = new KloopPresenter(KloopClient.getClient(requireContext()));
+    mPresenter.bind(this);
   }
 
   @Nullable
@@ -39,38 +44,32 @@ public class KloopFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
-    KloopApi mApi = KloopClient.getClient(getActivity());
-    mApi.loadSputnikRss().enqueue(new Callback<KloopFeed>() {
-      @Override
-      public void onResponse(Call<KloopFeed> call, Response<KloopFeed> response) {
-        Log.d(TAG, "onResponse: Starts");
-        Log.d(TAG, "onResponse: " + response.body().getData().size());
-        Log.d(TAG, "onResponse: " + response.body().getData().get(0).getTitle());
-        Log.d(TAG, "onResponse: " + response.body().getData().get(0).getCreatedBy());
-        String description = response.body().getData().get(0).getDescription();
-        Log.d(TAG, "onResponse:  " + Utils.getKloopDescription(description));
-        String date = response.body().getData().get(0).getCreatedDate();
-        Log.d(TAG, "onResponse: "+ DateFormatter.getFormattedDate(date));
-
-
-      }
-
-      @Override
-      public void onFailure(Call<KloopFeed> call, Throwable t) {
-        Log.d(TAG, "onFailure: " + t.getMessage());
-
-      }
-    });
+    mPresenter.loadData();
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
+    mPresenter.unBind();
   }
 
   @Override
   public String getTitle() {
-    return null;
+    return "kloop.kg";
+  }
+
+  @Override
+  public void showMessage(String message) {
+    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+  }
+
+  @Override
+  public void showProgress() {
+
+  }
+
+  @Override
+  public void dismissProgress() {
+
   }
 }

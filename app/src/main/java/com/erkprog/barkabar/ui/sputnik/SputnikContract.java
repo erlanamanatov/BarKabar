@@ -17,8 +17,6 @@ public class SputnikContract {
 
   interface Presenter extends BasePresenter<View> {
 
-    void loadData();
-
     void onItemClick(SputnikItem item);
   }
 }

@@ -8,6 +8,6 @@ import retrofit2.http.GET;
 public interface KloopApi {
 
   @GET("feed")
-  Call<KloopFeed> loadSputnikRss();
+  Call<KloopFeed> loadKloopRss();
 
 }

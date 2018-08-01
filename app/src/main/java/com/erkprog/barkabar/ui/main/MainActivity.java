@@ -30,14 +30,5 @@ public class MainActivity extends AppCompatActivity {
 
     TabLayout tabLayout = findViewById(R.id.main_tabs);
     tabLayout.setupWithViewPager(viewPager);
-
-//    FragmentManager fm = getSupportFragmentManager();
-//    Fragment fragment = fm.findFragmentById(R.id.sputnik_fragment_container);
-//
-//    if (fragment == null) {
-//      fragment = new SputnikFragment();
-//      fm.beginTransaction().replace(R.id.sputnik_fragment_container, fragment).commit();
-//    }
-
   }
 }
