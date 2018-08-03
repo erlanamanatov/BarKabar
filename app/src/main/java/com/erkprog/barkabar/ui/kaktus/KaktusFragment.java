@@ -7,25 +7,20 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.erkprog.barkabar.R;
-import com.erkprog.barkabar.data.entity.KaktusFeed;
-import com.erkprog.barkabar.data.entity.KaktusItem;
-import com.erkprog.barkabar.data.network.kaktusRepository.KaktusApi;
 import com.erkprog.barkabar.data.network.kaktusRepository.KaktusClient;
-import com.erkprog.barkabar.data.network.kloopRepository.KloopClient;
 import com.erkprog.barkabar.ui.BaseFragment;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-public class KaktusFragment extends BaseFragment {
+public class KaktusFragment extends BaseFragment implements KaktusContract.View {
   private static final String TAG = "KaktusFragment";
+  private KaktusContract.Presenter mPresenter;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    initPresenter();
   }
 
   @Nullable
@@ -38,30 +33,18 @@ public class KaktusFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+    mPresenter.loadData();
+  }
 
-    KaktusApi mService = KaktusClient.getClient();
-    mService.loadKaktusFeed().enqueue(new Callback<KaktusFeed>() {
-      @Override
-      public void onResponse(Call<KaktusFeed> call, Response<KaktusFeed> response) {
-        Log.d(TAG, "onResponse: starts");
-        KaktusItem item = response.body().getData().get(0);
-        Log.d(TAG, "onResponse: " + item.getTitle());
-        Log.d(TAG, "onResponse: " + item.getDescription());
-        Log.d(TAG, "onResponse: " + item.getCreatedDate());
-        Log.d(TAG, "onResponse: " + item.getLink());
-        Log.d(TAG, "onResponse: " + item.getImgUrl());
-      }
-
-      @Override
-      public void onFailure(Call<KaktusFeed> call, Throwable t) {
-        Log.d(TAG, "onFailure: " + t.getMessage());
-      }
-    });
+  private void initPresenter() {
+    mPresenter = new KaktusPresenter(KaktusClient.getClient());
+    mPresenter.bind(this);
   }
 
   @Override
   public void onDestroy() {
     super.onDestroy();
+    mPresenter.unBind();
   }
 
   @Override
@@ -71,5 +54,20 @@ public class KaktusFragment extends BaseFragment {
 
   public static KaktusFragment newInstance() {
     return new KaktusFragment();
+  }
+
+  @Override
+  public void showMessage(String message) {
+    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+  }
+
+  @Override
+  public void showProgress() {
+
+  }
+
+  @Override
+  public void dismissProgress() {
+
   }
 }
