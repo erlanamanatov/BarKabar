@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.erkprog.barkabar.R;
+import com.erkprog.barkabar.ui.kaktus.KaktusFragment;
 import com.erkprog.barkabar.ui.kloop.KloopFragment;
 import com.erkprog.barkabar.ui.sputnik.SputnikFragment;
 
@@ -25,8 +26,9 @@ public class MainActivity extends AppCompatActivity {
     ViewPager viewPager = findViewById(R.id.view_pager);
     ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
 
-    adapter.addFragment(new KloopFragment());
-    adapter.addFragment(new SputnikFragment());
+    adapter.addFragment(KloopFragment.newInstance());
+    adapter.addFragment(SputnikFragment.newInstance());
+    adapter.addFragment(KaktusFragment.newInstance());
 
     viewPager.setAdapter(adapter);
 
