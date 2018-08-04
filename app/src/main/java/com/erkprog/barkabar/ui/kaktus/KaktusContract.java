@@ -10,10 +10,13 @@ public interface KaktusContract {
   interface View extends BaseView {
 
     void showFeed(List<KaktusItem> data);
+
+    void showArticle(String link);
   }
 
   interface Presenter extends BasePresenter<View> {
 
+    void onItemClick(KaktusItem item);
   }
 
 }

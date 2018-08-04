@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.KaktusItem;
+import com.erkprog.barkabar.ui.OnClickListener;
 import com.erkprog.barkabar.util.DateFormatter;
 import com.squareup.picasso.Picasso;
 
@@ -18,9 +19,11 @@ import java.util.List;
 public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusViewHolder> {
 
   private List<KaktusItem> mData;
+  private OnClickListener<KaktusItem> mListener;
 
-  KaktusAdapter(List<KaktusItem> data) {
+  KaktusAdapter(List<KaktusItem> data, OnClickListener<KaktusItem> listener) {
     mData = data;
+    mListener = listener;
   }
 
   @NonNull
@@ -33,7 +36,7 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
 
   @Override
   public void onBindViewHolder(@NonNull KaktusViewHolder holder, int position) {
-    KaktusItem item = mData.get(position);
+    final KaktusItem item = mData.get(position);
     if (item != null) {
       holder.title.setText(item.getTitle());
       holder.description.setText(item.getDescription());
@@ -47,6 +50,14 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
             .placeholder(R.drawable.ic_image_holder)
             .into(holder.image);
       }
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          if (mListener != null) {
+            mListener.onItemClick(item);
+          }
+        }
+      });
     }
 
   }

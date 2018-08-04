@@ -16,10 +16,13 @@ import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.KaktusItem;
 import com.erkprog.barkabar.data.network.kaktusRepository.KaktusClient;
 import com.erkprog.barkabar.ui.BaseFragment;
+import com.erkprog.barkabar.ui.OnClickListener;
+import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.util.List;
 
-public class KaktusFragment extends BaseFragment implements KaktusContract.View {
+public class KaktusFragment extends BaseFragment implements KaktusContract.View,
+    OnClickListener<KaktusItem> {
   private static final String TAG = "KaktusFragment";
   private KaktusContract.Presenter mPresenter;
   private RecyclerView mRecyclerView;
@@ -62,8 +65,13 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View 
 
   @Override
   public void showFeed(List<KaktusItem> data) {
-    mAdapter = new KaktusAdapter(data);
+    mAdapter = new KaktusAdapter(data, this);
     mRecyclerView.setAdapter(mAdapter);
+  }
+
+  @Override
+  public void showArticle(String link) {
+    new FinestWebView.Builder(getActivity()).show(link);
   }
 
   @Override
@@ -94,5 +102,10 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View 
   @Override
   public void dismissProgress() {
     mProgressBar.setVisibility(View.GONE);
+  }
+
+  @Override
+  public void onItemClick(KaktusItem item) {
+    mPresenter.onItemClick(item);
   }
 }

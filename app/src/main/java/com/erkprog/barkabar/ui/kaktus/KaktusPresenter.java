@@ -72,4 +72,9 @@ public class KaktusPresenter implements KaktusContract.Presenter {
   public void unBind() {
     mView = null;
   }
+
+  @Override
+  public void onItemClick(KaktusItem item) {
+    mView.showArticle(item.getLink());
+  }
 }
