@@ -28,24 +28,37 @@ public class KaktusPresenter implements KaktusContract.Presenter {
 
   @Override
   public void loadData() {
+    mView.showProgress();
     if (mService != null) {
 
-    mService.loadKaktusFeed().enqueue(new Callback<KaktusFeed>() {
-      @Override
-      public void onResponse(Call<KaktusFeed> call, Response<KaktusFeed> response) {
-        Log.d(TAG, "onResponse: starts");
-        KaktusItem item = response.body().getData().get(0);
-        Log.d(TAG, "onResponse: " + item.getTitle());
-        Log.d(TAG, "onResponse: " + item.getDescription());
-        Log.d(TAG, "onResponse: " + item.getCreatedDate());
-        Log.d(TAG, "onResponse: " + item.getLink());
-        Log.d(TAG, "onResponse: " + item.getImgUrl());
-      }
-      @Override
-      public void onFailure(Call<KaktusFeed> call, Throwable t) {
-        Log.d(TAG, "onFailure: " + t.getMessage());
-      }
-    });
+      mService.loadKaktusFeed().enqueue(new Callback<KaktusFeed>() {
+        @Override
+        public void onResponse(Call<KaktusFeed> call, Response<KaktusFeed> response) {
+          if (isAttached()) {
+            mView.dismissProgress();
+
+            if (response.isSuccessful() && response.body() != null) {
+              Log.d(TAG, "onResponse: response successful");
+
+              if (response.body().getData() != null && response.body().getData().size() != 0) {
+                mView.showFeed(response.body().getData());
+              } else {
+                Log.d(TAG, "onResponse: Data is null or size is 0");
+              }
+            } else {
+              Log.d(TAG, "onResponse: response is not successful or body is null");
+            }
+          }
+        }
+
+        @Override
+        public void onFailure(Call<KaktusFeed> call, Throwable t) {
+          if (isAttached()) {
+            mView.dismissProgress();
+            Log.d(TAG, "onFailure: " + t.getMessage());
+          }
+        }
+      });
 
     }
   }
