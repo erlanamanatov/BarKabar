@@ -49,24 +49,8 @@ public class TabsFragment extends Fragment {
     mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
   }
 
-  //  TabLayout mTabLayout;
+  public static Fragment newInstance() {
+    return new TabsFragment();
+  }
 
-//  @Override
-//  protected void onCreate(Bundle savedInstanceState) {
-//    super.onCreate(savedInstanceState);
-//    setContentView(R.layout.fragment_tabs);
-//
-//    ViewPager viewPager = findViewById(R.id.view_pager);
-//    ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-//
-//    adapter.addFragment(KloopFragment.newInstance());
-//    adapter.addFragment(SputnikFragment.newInstance());
-//    adapter.addFragment(KaktusFragment.newInstance());
-//
-//    viewPager.setAdapter(adapter);
-//
-//    mTabLayout = findViewById(R.id.main_tabs);
-//    mTabLayout.setupWithViewPager(viewPager);
-//    mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-//  }
 }
