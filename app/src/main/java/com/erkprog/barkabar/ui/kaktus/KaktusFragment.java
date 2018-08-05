@@ -116,7 +116,7 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View,
     if (tab != null) {
       tab.setBackgroundResource(R.color.kaktusBackground);
       tab.setTextColorResource(R.color.colorBlack);
-      tab.setIndicatorColor(Color.MAGENTA);
+      tab.setIndicatorColor(Color.BLACK);
       tab.setDividerColorResource(R.color.colorBlack);
     }
   }

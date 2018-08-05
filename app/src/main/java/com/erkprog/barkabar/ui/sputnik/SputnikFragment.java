@@ -114,7 +114,7 @@ public class SputnikFragment extends BaseFragment implements SputnikContract.Vie
     if (tab != null) {
       tab.setBackgroundResource(R.color.sputnikBackground);
       tab.setTextColorResource(R.color.colorBlack);
-      tab.setIndicatorColor(Color.BLUE);
+      tab.setIndicatorColor(Color.BLACK);
       tab.setDividerColorResource(R.color.colorBlack);
     }
   }

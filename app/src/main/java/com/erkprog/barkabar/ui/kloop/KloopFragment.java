@@ -112,7 +112,7 @@ public class KloopFragment extends BaseFragment implements KloopContract.View,
     if (tab != null) {
       tab.setBackgroundResource(R.color.kloopBackground);
       tab.setTextColorResource(R.color.colorWhite);
-      tab.setIndicatorColor(Color.RED);
+      tab.setIndicatorColorResource(R.color.colorWhite);
       tab.setDividerColorResource(R.color.colorWhite);
     }
   }
