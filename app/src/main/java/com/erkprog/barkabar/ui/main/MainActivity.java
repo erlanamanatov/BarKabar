@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.erkprog.barkabar.R;
+import com.erkprog.barkabar.ui.weather.WeatherFragment;
 
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
@@ -70,8 +71,7 @@ public class MainActivity extends AppCompatActivity
     if (id == R.id.nav_feed) {
       switchFragment(TabsFragment.newInstance());
     } else if (id == R.id.nav_weather) {
-      Toast.makeText(this, "Show weather here", Toast.LENGTH_SHORT).show();
-
+      switchFragment(WeatherFragment.newInstance());
     }
 
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
