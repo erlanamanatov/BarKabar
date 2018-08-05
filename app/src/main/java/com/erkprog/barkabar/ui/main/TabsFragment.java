@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.astuetz.PagerSlidingTabStrip;
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.ui.kaktus.KaktusFragment;
 import com.erkprog.barkabar.ui.kloop.KloopFragment;
@@ -18,8 +19,8 @@ import com.erkprog.barkabar.ui.sputnik.SputnikFragment;
 
 public class TabsFragment extends Fragment {
   private static final String TAG = "Fragment Tabs";
-  TabLayout mTabLayout;
   ViewPager mViewPager;
+  PagerSlidingTabStrip mTabs;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -31,8 +32,7 @@ public class TabsFragment extends Fragment {
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View v = inflater.inflate(R.layout.fragment_tabs, container, false);
     mViewPager = v.findViewById(R.id.view_pager);
-    mTabLayout = v.findViewById(R.id.main_tabs);
-
+    mTabs = v.findViewById(R.id.main_tabs);
     return v;
   }
 
@@ -44,9 +44,8 @@ public class TabsFragment extends Fragment {
     adapter.addFragment(SputnikFragment.newInstance());
     adapter.addFragment(KaktusFragment.newInstance());
     mViewPager.setAdapter(adapter);
+    mTabs.setViewPager(mViewPager);
 
-    mTabLayout.setupWithViewPager(mViewPager);
-    mTabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
   }
 
   public static Fragment newInstance() {
