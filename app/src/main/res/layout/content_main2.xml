@@ -5,25 +5,20 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity">
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.main.Main2Activity"
+    tools:showIn="@layout/app_bar_main2">
 
-  <android.support.design.widget.TabLayout
-      android:id="@+id/main_tabs"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="0dp"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toTopOf="parent"/>
-
-  <android.support.v4.view.ViewPager
-      android:id="@+id/view_pager"
+  <FrameLayout
+      android:id="@+id/fragment_container"
       android:layout_width="0dp"
       android:layout_height="0dp"
       android:layout_margin="0dp"
       app:layout_constraintBottom_toBottomOf="parent"
       app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintHorizontal_bias="0.451"
       app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintTop_toBottomOf="@+id/main_tabs"/>
+      app:layout_constraintTop_toTopOf="parent"
+      >
+
+  </FrameLayout>
 </android.support.constraint.ConstraintLayout>

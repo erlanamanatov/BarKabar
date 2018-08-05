@@ -1,10 +1,8 @@
 package com.erkprog.barkabar.ui.sputnik;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -18,7 +16,6 @@ import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
 import com.erkprog.barkabar.data.network.sputnikRepository.SputnikClient;
 import com.erkprog.barkabar.ui.BaseFragment;
 import com.erkprog.barkabar.ui.OnClickListener;
-import com.erkprog.barkabar.ui.main.MainActivity;
 import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.util.List;
