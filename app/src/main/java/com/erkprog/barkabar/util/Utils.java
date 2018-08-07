@@ -1,5 +1,6 @@
 package com.erkprog.barkabar.util;
 
+import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.ui.kaktus.KaktusFragment;
 import com.erkprog.barkabar.ui.kloop.KloopFragment;
 import com.erkprog.barkabar.ui.sputnik.SputnikFragment;
@@ -23,9 +24,9 @@ public class Utils {
 
   public static ArrayList<String> getDefaultTabOrder() {
     ArrayList<String> tabOrder = new ArrayList<>();
-    tabOrder.add(KloopFragment.class.getSimpleName());
-    tabOrder.add(SputnikFragment.class.getSimpleName());
-    tabOrder.add(KaktusFragment.class.getSimpleName());
+    tabOrder.add(Defaults.KLOOP_SOURCE_NAME);
+    tabOrder.add(Defaults.SPUTNIK_SOURCE_NAME);
+    tabOrder.add(Defaults.KAKTUS_SOURCE_NAME);
     return tabOrder;
   }
 }

@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.TextView;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.Defaults;
@@ -48,14 +51,22 @@ public class SettingsActivity extends AppCompatActivity {
 //    String frString = gson.toJson(fragments);
 //    Log.d(TAG, "onCreate: json: " + frString);
 
-    ArrayList<String> order = getOrder();
+    List<String> order = getOrder();
     Log.d(TAG, "onCreate: " + order);
-//    ArrayList<SourceItem> mData = getSourceItems(order);
+
+    TextView infoText = findViewById(R.id.setting_info_text);
+    RecyclerView recyclerView = findViewById(R.id.settings_recycler_view);
+    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+    recyclerView.setLayoutManager(layoutManager);
+
+    ArrayList<SourceItem> sourceItems = getSourceItems(order);
+    SourceAdapter adapter = new SourceAdapter(sourceItems);
+    recyclerView.setAdapter(adapter);
 
 
   }
 
-  private ArrayList<SourceItem> getSourceItems(ArrayList<String> order) {
+  private ArrayList<SourceItem> getSourceItems(List<String> order) {
     if (order == null) {
       return null;
     }
