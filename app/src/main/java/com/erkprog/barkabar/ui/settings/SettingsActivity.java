@@ -39,22 +39,9 @@ public class SettingsActivity extends AppCompatActivity {
 
     mSharedPreferences = getSharedPreferences(Defaults.SETTINGS, MODE_PRIVATE);
 
-
-//    Map<Integer, String> fragments = new HashMap<>();
-//    fragments.put(1, KloopFragment.class.getSimpleName());
-//    fragments.put(2, SputnikFragment.class.getSimpleName());
-//    fragments.put(3, KaktusFragment.class.getSimpleName());
-//
-//    Log.d(TAG, "onCreate: " + fragments);
-//
-//    Gson gson = new Gson();
-//    String frString = gson.toJson(fragments);
-//    Log.d(TAG, "onCreate: json: " + frString);
-
-    List<String> order = getOrder();
+    List<String> order = Utils.getTabOrder(mSharedPreferences);
     Log.d(TAG, "onCreate: " + order);
 
-    TextView infoText = findViewById(R.id.setting_info_text);
     RecyclerView recyclerView = findViewById(R.id.settings_recycler_view);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     recyclerView.setLayoutManager(layoutManager);
@@ -81,11 +68,4 @@ public class SettingsActivity extends AppCompatActivity {
     return new Intent(context, SettingsActivity.class);
   }
 
-  public ArrayList<String> getOrder() {
-    if (mSharedPreferences.contains(Defaults.TAB_ORDER)) {
-      return null;
-    } else {
-      return Utils.getDefaultTabOrder();
-    }
-  }
 }

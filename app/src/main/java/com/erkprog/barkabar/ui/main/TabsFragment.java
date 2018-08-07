@@ -1,5 +1,7 @@
 package com.erkprog.barkabar.ui.main;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -14,10 +16,14 @@ import android.view.ViewGroup;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.erkprog.barkabar.R;
+import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.ui.BaseFragment;
 import com.erkprog.barkabar.ui.kaktus.KaktusFragment;
 import com.erkprog.barkabar.ui.kloop.KloopFragment;
 import com.erkprog.barkabar.ui.sputnik.SputnikFragment;
+import com.erkprog.barkabar.util.Utils;
+
+import java.util.List;
 
 
 public class TabsFragment extends Fragment {
@@ -26,9 +32,15 @@ public class TabsFragment extends Fragment {
   PagerSlidingTabStrip mTabs;
   ViewPagerAdapter mAdapter;
 
+  private SharedPreferences mSharedPreferences;
+
+  private List<String> tabsOrder;
+
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mSharedPreferences = getActivity().getSharedPreferences(Defaults.SETTINGS, Context
+        .MODE_PRIVATE);
   }
 
   @Nullable
@@ -44,9 +56,10 @@ public class TabsFragment extends Fragment {
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     mAdapter = new ViewPagerAdapter(getChildFragmentManager());
-    mAdapter.addFragment(KloopFragment.newInstance());
-    mAdapter.addFragment(SputnikFragment.newInstance());
-    mAdapter.addFragment(KaktusFragment.newInstance());
+
+    tabsOrder = Utils.getTabOrder(mSharedPreferences);
+    addFragmentsToAdapter();
+
     mViewPager.setAdapter(mAdapter);
     mTabs.setViewPager(mViewPager);
 
@@ -71,8 +84,20 @@ public class TabsFragment extends Fragment {
 
   }
 
+  private void addFragmentsToAdapter() {
+    for (String sourceName : tabsOrder) {
+      mAdapter.addFragment(Utils.getFragmentBySourceName(sourceName));
+    }
+  }
+
   public static Fragment newInstance() {
     return new TabsFragment();
+  }
+
+  @Override
+  public void onStart() {
+    super.onStart();
+    tabsOrder = Utils.getTabOrder(mSharedPreferences);
   }
 
 }
