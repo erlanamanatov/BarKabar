@@ -4,12 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,11 +16,9 @@ import com.astuetz.PagerSlidingTabStrip;
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.ui.BaseFragment;
-import com.erkprog.barkabar.ui.kaktus.KaktusFragment;
-import com.erkprog.barkabar.ui.kloop.KloopFragment;
-import com.erkprog.barkabar.ui.sputnik.SputnikFragment;
 import com.erkprog.barkabar.util.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,6 +31,7 @@ public class TabsFragment extends Fragment {
   private SharedPreferences mSharedPreferences;
 
   private List<String> tabsOrder;
+  private List<String> mCurrentTabOrder;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,6 +95,43 @@ public class TabsFragment extends Fragment {
   public void onStart() {
     super.onStart();
     tabsOrder = Utils.getTabOrder(mSharedPreferences);
+    Log.d(TAG, "onStart: tabsOrder from settings " + tabsOrder);
+    Log.d(TAG, "onStart: previously saved tabs " + mCurrentTabOrder);
+    if (tabsReOrdered()) {
+      mAdapter.clearData();
+      addFragmentsToAdapter();
+      mViewPager.setAdapter(mAdapter);
+      mTabs.setViewPager(mViewPager);
+    }
   }
 
+  private boolean tabsReOrdered() {
+    if (mCurrentTabOrder == null) {
+      return false;
+    }
+    if (tabsOrder.size() != mCurrentTabOrder.size()) {
+      return true;
+    }
+
+    for (int i = 0; i < tabsOrder.size(); i++) {
+      if (!tabsOrder.get(i).equals(mCurrentTabOrder.get(i))) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public void onStop() {
+    super.onStop();
+    saveCurrentTabOrder();
+    Log.d(TAG, "onStop: " + mCurrentTabOrder);
+  }
+
+  private void saveCurrentTabOrder() {
+    mCurrentTabOrder = new ArrayList<>();
+    for (int i = 0; i < mAdapter.getCount(); i++) {
+      mCurrentTabOrder.add(((BaseFragment) mAdapter.getItem(i)).getSourceName());
+    }
+  }
 }

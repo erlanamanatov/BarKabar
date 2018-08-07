@@ -1,6 +1,5 @@
 package com.erkprog.barkabar.ui.kloop;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.erkprog.barkabar.R;
+import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.KloopItem;
 import com.erkprog.barkabar.data.network.kloopRepository.KloopClient;
 import com.erkprog.barkabar.ui.BaseFragment;
@@ -115,5 +115,10 @@ public class KloopFragment extends BaseFragment implements KloopContract.View,
       tab.setIndicatorColorResource(R.color.colorWhite);
       tab.setDividerColorResource(R.color.colorWhite);
     }
+  }
+
+  @Override
+  public String getSourceName() {
+    return Defaults.KLOOP_SOURCE_NAME;
   }
 }

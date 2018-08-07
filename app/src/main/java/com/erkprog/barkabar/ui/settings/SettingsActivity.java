@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.erkprog.barkabar.R;
@@ -56,6 +57,13 @@ public class SettingsActivity extends AppCompatActivity {
     ItemTouchHelper touchHelper = new ItemTouchHelper(dragHelper);
     touchHelper.attachToRecyclerView(mRecyclerView);
 
+    findViewById(R.id.settings_save_button).setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        saveOrderSettings(mAdapter.getData());
+      }
+    });
+
 
   }
 
@@ -80,6 +88,8 @@ public class SettingsActivity extends AppCompatActivity {
       tabOrder.add(item.getSource());
     }
 
+    Log.d(TAG, "saveOrderSettings: " + tabOrder);
+
     Gson gson = new Gson();
     String order = gson.toJson(tabOrder);
     SharedPreferences.Editor editor = mSharedPreferences.edit();
@@ -90,6 +100,5 @@ public class SettingsActivity extends AppCompatActivity {
   @Override
   protected void onDestroy() {
     super.onDestroy();
-    saveOrderSettings(mAdapter.getData());
   }
 }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.erkprog.barkabar.R;
+import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.KaktusItem;
 import com.erkprog.barkabar.data.network.kaktusRepository.KaktusClient;
 import com.erkprog.barkabar.ui.BaseFragment;
@@ -119,5 +120,10 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View,
       tab.setIndicatorColor(Color.BLACK);
       tab.setDividerColorResource(R.color.colorBlack);
     }
+  }
+
+  @Override
+  public String getSourceName() {
+    return Defaults.KAKTUS_SOURCE_NAME;
   }
 }

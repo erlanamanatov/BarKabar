@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.erkprog.barkabar.R;
+import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
 import com.erkprog.barkabar.data.network.sputnikRepository.SputnikClient;
 import com.erkprog.barkabar.ui.BaseFragment;
@@ -117,5 +118,10 @@ public class SputnikFragment extends BaseFragment implements SputnikContract.Vie
       tab.setIndicatorColor(Color.BLACK);
       tab.setDividerColorResource(R.color.colorBlack);
     }
+  }
+
+  @Override
+  public String getSourceName() {
+    return Defaults.SPUTNIK_SOURCE_NAME;
   }
 }

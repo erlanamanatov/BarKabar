@@ -1,5 +1,6 @@
 package com.erkprog.barkabar.ui.main;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -10,7 +11,7 @@ import com.erkprog.barkabar.ui.BaseFragment;
 
 import java.util.ArrayList;
 
-public class ViewPagerAdapter extends FragmentStatePagerAdapter{
+public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
   private ArrayList<BaseFragment> mFragments;
 
@@ -40,4 +41,12 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter{
     return mFragments.get(position).getTitle();
   }
 
+  public void clearData() {
+    mFragments = new ArrayList<>();
+  }
+
+  @Override
+  public int getItemPosition(@NonNull Object object) {
+    return POSITION_NONE;
+  }
 }
