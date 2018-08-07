@@ -100,8 +100,10 @@ public class TabsFragment extends Fragment {
     if (tabsReOrdered()) {
       mAdapter.clearData();
       addFragmentsToAdapter();
-      mViewPager.setAdapter(mAdapter);
+      mAdapter.notifyDataSetChanged();
       mTabs.setViewPager(mViewPager);
+      mViewPager.setCurrentItem(0);
+      ((BaseFragment) mAdapter.getItem(0)).customizeTab(mTabs);
     }
   }
 
