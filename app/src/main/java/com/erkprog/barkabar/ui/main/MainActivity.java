@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.erkprog.barkabar.R;
+import com.erkprog.barkabar.ui.settings.SettingsActivity;
 import com.erkprog.barkabar.ui.weather.WeatherFragment;
 
 public class MainActivity extends AppCompatActivity
@@ -58,6 +59,7 @@ public class MainActivity extends AppCompatActivity
     int id = item.getItemId();
 
     if (id == R.id.action_settings) {
+      startActivity(SettingsActivity.newIntent(this));
       return true;
     }
 
