@@ -11,9 +11,11 @@ import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.SourceItem;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.SourceViewHolder> {
+public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.SourceViewHolder>
+    implements ActionCompletionContract {
 
   private List<SourceItem> mData;
 
@@ -39,6 +41,20 @@ public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.SourceView
   @Override
   public int getItemCount() {
     return mData.size();
+  }
+
+  @Override
+  public void onViewMoved(int fromPosition, int toPosition) {
+    if (fromPosition < toPosition) {
+      for (int i = fromPosition; i < toPosition; i++) {
+        Collections.swap(mData, i, i + 1);
+      }
+    } else {
+      for (int i = fromPosition; i > toPosition; i--) {
+        Collections.swap(mData, i, i - 1);
+      }
+    }
+    notifyItemMoved(fromPosition, toPosition);
   }
 
   static class SourceViewHolder extends RecyclerView.ViewHolder {

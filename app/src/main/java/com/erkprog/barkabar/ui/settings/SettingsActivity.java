@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -32,8 +33,7 @@ public class SettingsActivity extends AppCompatActivity {
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-
-
+    
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
 
@@ -49,6 +49,10 @@ public class SettingsActivity extends AppCompatActivity {
     ArrayList<SourceItem> sourceItems = getSourceItems(order);
     SourceAdapter adapter = new SourceAdapter(sourceItems);
     recyclerView.setAdapter(adapter);
+
+    ItemDragHelper dragHelper = new ItemDragHelper(adapter);
+    ItemTouchHelper touchHelper = new ItemTouchHelper(dragHelper);
+    touchHelper.attachToRecyclerView(recyclerView);
 
 
   }
