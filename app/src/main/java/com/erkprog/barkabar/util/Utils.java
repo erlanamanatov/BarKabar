@@ -7,8 +7,11 @@ import com.erkprog.barkabar.ui.BaseFragment;
 import com.erkprog.barkabar.ui.kaktus.KaktusFragment;
 import com.erkprog.barkabar.ui.kloop.KloopFragment;
 import com.erkprog.barkabar.ui.sputnik.SputnikFragment;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,8 +39,13 @@ public class Utils {
   public static ArrayList<String> getTabOrder(SharedPreferences sharedPreferences) {
     //return tab order from settings, returns default order if settings not found
     if (sharedPreferences.contains(Defaults.TAB_ORDER)) {
-      ArrayList<String> tabOrder = new ArrayList<>();
-      return tabOrder;
+      List<String> tabOrder = new ArrayList<>();
+      String order = sharedPreferences.getString(Defaults.TAB_ORDER, null);
+      Gson gson = new Gson();
+      String[] items = gson.fromJson(order, String[].class);
+      tabOrder = Arrays.asList(items);
+      return new ArrayList<String>(tabOrder);
+
     } else {
       return getDefaultTabOrder();
     }

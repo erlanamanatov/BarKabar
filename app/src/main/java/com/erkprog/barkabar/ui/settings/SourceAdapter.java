@@ -38,6 +38,10 @@ public class SourceAdapter extends RecyclerView.Adapter<SourceAdapter.SourceView
     }
   }
 
+  public List<SourceItem> getData() {
+    return mData;
+  }
+
   @Override
   public int getItemCount() {
     return mData.size();

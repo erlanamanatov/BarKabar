@@ -30,10 +30,12 @@ public class SettingsActivity extends AppCompatActivity {
   private static final String TAG = "SettingsActivity";
 
   SharedPreferences mSharedPreferences;
+  private RecyclerView mRecyclerView;
+  private SourceAdapter mAdapter;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
-    
+
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_settings);
 
@@ -42,17 +44,17 @@ public class SettingsActivity extends AppCompatActivity {
     List<String> order = Utils.getTabOrder(mSharedPreferences);
     Log.d(TAG, "onCreate: " + order);
 
-    RecyclerView recyclerView = findViewById(R.id.settings_recycler_view);
+    mRecyclerView = findViewById(R.id.settings_recycler_view);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-    recyclerView.setLayoutManager(layoutManager);
+    mRecyclerView.setLayoutManager(layoutManager);
 
     ArrayList<SourceItem> sourceItems = getSourceItems(order);
-    SourceAdapter adapter = new SourceAdapter(sourceItems);
-    recyclerView.setAdapter(adapter);
+    mAdapter = new SourceAdapter(sourceItems);
+    mRecyclerView.setAdapter(mAdapter);
 
-    ItemDragHelper dragHelper = new ItemDragHelper(adapter);
+    ItemDragHelper dragHelper = new ItemDragHelper(mAdapter);
     ItemTouchHelper touchHelper = new ItemTouchHelper(dragHelper);
-    touchHelper.attachToRecyclerView(recyclerView);
+    touchHelper.attachToRecyclerView(mRecyclerView);
 
 
   }
@@ -72,4 +74,22 @@ public class SettingsActivity extends AppCompatActivity {
     return new Intent(context, SettingsActivity.class);
   }
 
+  private void saveOrderSettings(List<SourceItem> data) {
+    ArrayList<String> tabOrder = new ArrayList<>();
+    for (SourceItem item : data) {
+      tabOrder.add(item.getSource());
+    }
+
+    Gson gson = new Gson();
+    String order = gson.toJson(tabOrder);
+    SharedPreferences.Editor editor = mSharedPreferences.edit();
+    editor.putString(Defaults.TAB_ORDER, order);
+    editor.apply();
+  }
+
+  @Override
+  protected void onDestroy() {
+    super.onDestroy();
+    saveOrderSettings(mAdapter.getData());
+  }
 }
