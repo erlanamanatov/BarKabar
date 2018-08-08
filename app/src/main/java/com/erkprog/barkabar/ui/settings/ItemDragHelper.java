@@ -28,4 +28,9 @@ public class ItemDragHelper extends ItemTouchHelper.Callback {
   public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
 
   }
+
+  @Override
+  public boolean isLongPressDragEnabled() {
+    return false;
+  }
 }

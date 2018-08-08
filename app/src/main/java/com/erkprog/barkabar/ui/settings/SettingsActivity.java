@@ -11,6 +11,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.Defaults;
@@ -26,13 +27,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements OnStartDragListener {
 
   private static final String TAG = "SettingsActivity";
 
   SharedPreferences mSharedPreferences;
   private RecyclerView mRecyclerView;
   private SourceAdapter mAdapter;
+  ItemTouchHelper mItemTouchHelper;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +52,12 @@ public class SettingsActivity extends AppCompatActivity {
     mRecyclerView.setLayoutManager(layoutManager);
 
     ArrayList<SourceItem> sourceItems = getSourceItems(order);
-    mAdapter = new SourceAdapter(sourceItems);
+    mAdapter = new SourceAdapter(sourceItems, this);
     mRecyclerView.setAdapter(mAdapter);
 
     ItemDragHelper dragHelper = new ItemDragHelper(mAdapter);
-    ItemTouchHelper touchHelper = new ItemTouchHelper(dragHelper);
-    touchHelper.attachToRecyclerView(mRecyclerView);
+    mItemTouchHelper = new ItemTouchHelper(dragHelper);
+    mItemTouchHelper.attachToRecyclerView(mRecyclerView);
 
     findViewById(R.id.settings_save_button).setOnClickListener(new View.OnClickListener() {
       @Override
@@ -95,10 +97,17 @@ public class SettingsActivity extends AppCompatActivity {
     SharedPreferences.Editor editor = mSharedPreferences.edit();
     editor.putString(Defaults.TAB_ORDER, order);
     editor.apply();
+
+    Toast.makeText(this, R.string.new_order_saved, Toast.LENGTH_SHORT).show();
   }
 
   @Override
   protected void onDestroy() {
     super.onDestroy();
+  }
+
+  @Override
+  public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
+    mItemTouchHelper.startDrag(viewHolder);
   }
 }
