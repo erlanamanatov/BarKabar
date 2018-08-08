@@ -1,8 +1,10 @@
 package com.erkprog.barkabar.ui.settings;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -36,6 +38,7 @@ public class SettingsActivity extends AppCompatActivity implements OnStartDragLi
   private SourceAdapter mAdapter;
   ItemTouchHelper mItemTouchHelper;
 
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
 
@@ -44,14 +47,14 @@ public class SettingsActivity extends AppCompatActivity implements OnStartDragLi
 
     mSharedPreferences = getSharedPreferences(Defaults.SETTINGS, MODE_PRIVATE);
 
-    List<String> order = Utils.getTabOrder(mSharedPreferences);
-    Log.d(TAG, "onCreate: " + order);
+    List<String> savedOrder = Utils.getTabOrder(mSharedPreferences);
+    Log.d(TAG, "onCreate: " + savedOrder);
 
     mRecyclerView = findViewById(R.id.settings_recycler_view);
     RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
     mRecyclerView.setLayoutManager(layoutManager);
 
-    ArrayList<SourceItem> sourceItems = getSourceItems(order);
+    ArrayList<SourceItem> sourceItems = getSourceItems(savedOrder);
     mAdapter = new SourceAdapter(sourceItems, this);
     mRecyclerView.setAdapter(mAdapter);
 
@@ -85,10 +88,7 @@ public class SettingsActivity extends AppCompatActivity implements OnStartDragLi
   }
 
   private void saveOrderSettings(List<SourceItem> data) {
-    ArrayList<String> tabOrder = new ArrayList<>();
-    for (SourceItem item : data) {
-      tabOrder.add(item.getSource());
-    }
+    ArrayList<String> tabOrder = getCurrentTabOrder();
 
     Log.d(TAG, "saveOrderSettings: " + tabOrder);
 
@@ -109,5 +109,38 @@ public class SettingsActivity extends AppCompatActivity implements OnStartDragLi
   @Override
   public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
     mItemTouchHelper.startDrag(viewHolder);
+  }
+
+  @Override
+  public void onBackPressed() {
+    List<String> savedOrder = Utils.getTabOrder(mSharedPreferences);
+    if (Utils.tabsReOrdered(savedOrder, getCurrentTabOrder())) {
+      showTabsReOrderedDialog();
+    } else {
+      super.onBackPressed();
+    }
+  }
+
+  private void showTabsReOrderedDialog() {
+    new AlertDialog.Builder(this)
+        .setTitle(R.string.unsaved_changes)
+        .setMessage(R.string.back_to_main)
+        .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+          @Override
+          public void onClick(DialogInterface dialog, int which) {
+            finish();
+          }
+        })
+        .setNegativeButton("Cancel", null)
+        .create()
+        .show();
+  }
+
+  public ArrayList<String> getCurrentTabOrder() {
+    ArrayList<String> tabOrder = new ArrayList<>();
+    for (SourceItem item : mAdapter.getData()) {
+      tabOrder.add(item.getSource());
+    }
+    return tabOrder;
   }
 }

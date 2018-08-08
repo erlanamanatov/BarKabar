@@ -69,4 +69,21 @@ public class Utils {
 
     return fragment;
   }
+
+  public static boolean tabsReOrdered(List<String> savedOrder, List<String>
+      currentOrder) {
+    if (currentOrder == null) {
+      return false;
+    }
+    if (savedOrder.size() != currentOrder.size()) {
+      return true;
+    }
+
+    for (int i = 0; i < savedOrder.size(); i++) {
+      if (!savedOrder.get(i).equals(currentOrder.get(i))) {
+        return true;
+      }
+    }
+    return false;
+  }
 }

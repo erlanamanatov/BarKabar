@@ -10,4 +10,6 @@
   <string name="choose_tabs_order">Choose tabs order</string>
   <string name="save">Save</string>
   <string name="new_order_saved">New order saved</string>
+  <string name="unsaved_changes">You have unsaved changes</string>
+  <string name="back_to_main">Back to main screen?</string>
 </resources>

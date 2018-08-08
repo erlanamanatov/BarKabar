@@ -97,7 +97,7 @@ public class TabsFragment extends Fragment {
     tabsOrder = Utils.getTabOrder(mSharedPreferences);
     Log.d(TAG, "onStart: tabsOrder from settings " + tabsOrder);
     Log.d(TAG, "onStart: previously saved tabs " + mCurrentTabOrder);
-    if (tabsReOrdered()) {
+    if (Utils.tabsReOrdered(tabsOrder, mCurrentTabOrder)) {
       mAdapter.clearData();
       addFragmentsToAdapter();
       mAdapter.notifyDataSetChanged();
@@ -105,22 +105,6 @@ public class TabsFragment extends Fragment {
       mViewPager.setCurrentItem(0);
       ((BaseFragment) mAdapter.getItem(0)).customizeTab(mTabs);
     }
-  }
-
-  private boolean tabsReOrdered() {
-    if (mCurrentTabOrder == null) {
-      return false;
-    }
-    if (tabsOrder.size() != mCurrentTabOrder.size()) {
-      return true;
-    }
-
-    for (int i = 0; i < tabsOrder.size(); i++) {
-      if (!tabsOrder.get(i).equals(mCurrentTabOrder.get(i))) {
-        return true;
-      }
-    }
-    return false;
   }
 
   @Override
