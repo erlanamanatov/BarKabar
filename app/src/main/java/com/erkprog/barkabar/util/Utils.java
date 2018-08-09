@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 
 import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.ui.BaseFragment;
+import com.erkprog.barkabar.ui.bbc.BbcFragment;
 import com.erkprog.barkabar.ui.kaktus.KaktusFragment;
 import com.erkprog.barkabar.ui.kloop.KloopFragment;
 import com.erkprog.barkabar.ui.sputnik.SputnikFragment;
@@ -33,6 +34,7 @@ public class Utils {
     tabOrder.add(Defaults.SPUTNIK_SOURCE_NAME);
     tabOrder.add(Defaults.KAKTUS_SOURCE_NAME);
     tabOrder.add(Defaults.KLOOP_SOURCE_NAME);
+    tabOrder.add(Defaults.BBC_SOURCE_NAME);
     return tabOrder;
   }
 
@@ -64,6 +66,10 @@ public class Utils {
 
       case Defaults.KAKTUS_SOURCE_NAME:
         fragment = KaktusFragment.newInstance();
+        break;
+
+      case Defaults.BBC_SOURCE_NAME:
+        fragment = BbcFragment.newInstance();
         break;
     }
 
