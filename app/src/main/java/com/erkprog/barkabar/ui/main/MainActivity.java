@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.ui.settings.SettingsActivity;
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity
 
     if (id == R.id.nav_feed) {
       switchFragment(TabsFragment.newInstance());
-    } else if (id == R.id.nav_weather) {
+    } else if (id == R.id.nav_exchange_rates) {
       switchFragment(WeatherFragment.newInstance());
     }
 

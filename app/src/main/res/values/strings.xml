@@ -12,4 +12,7 @@
   <string name="new_order_saved">New order saved</string>
   <string name="unsaved_changes">You have unsaved changes</string>
   <string name="back_to_main">Back to main screen?</string>
+  <string name="news">News</string>
+  <string name="exchange_rates">Exchange rates</string>
+  <string name="official_exchange_rates">Official exchange rates</string>
 </resources>

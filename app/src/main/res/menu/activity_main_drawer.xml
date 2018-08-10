@@ -6,10 +6,10 @@
   <group android:checkableBehavior="single">
     <item
         android:id="@+id/nav_feed"
-        android:title="News feed"/>
+        android:title="@string/news"/>
     <item
-        android:id="@+id/nav_weather"
-        android:title="Weather"/>
+        android:id="@+id/nav_exchange_rates"
+        android:title="@string/exchange_rates"/>
   </group>
 
 </menu>
