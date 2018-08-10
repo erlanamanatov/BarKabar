@@ -31,10 +31,10 @@ public class Utils {
 
   private static ArrayList<String> getDefaultTabOrder() {
     ArrayList<String> tabOrder = new ArrayList<>();
+    tabOrder.add(Defaults.BBC_SOURCE_NAME);
     tabOrder.add(Defaults.SPUTNIK_SOURCE_NAME);
     tabOrder.add(Defaults.KAKTUS_SOURCE_NAME);
     tabOrder.add(Defaults.KLOOP_SOURCE_NAME);
-    tabOrder.add(Defaults.BBC_SOURCE_NAME);
     return tabOrder;
   }
 
