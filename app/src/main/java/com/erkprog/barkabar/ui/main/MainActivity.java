@@ -13,7 +13,7 @@ import android.view.MenuItem;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.ui.settings.SettingsActivity;
-import com.erkprog.barkabar.ui.weather.WeatherFragment;
+import com.erkprog.barkabar.ui.exchange.ExchangeRatesFragment;
 
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity
     if (id == R.id.nav_feed) {
       switchFragment(TabsFragment.newInstance());
     } else if (id == R.id.nav_exchange_rates) {
-      switchFragment(WeatherFragment.newInstance());
+      switchFragment(ExchangeRatesFragment.newInstance());
     }
 
     DrawerLayout drawer = findViewById(R.id.drawer_layout);
