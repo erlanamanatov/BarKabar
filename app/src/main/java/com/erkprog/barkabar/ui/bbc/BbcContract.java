@@ -11,9 +11,12 @@ interface BbcContract {
   interface View extends BaseView {
 
     void showFeed(List<BbcItem> data);
+
+    void showArticle(String link);
   }
 
   interface Presenter extends BasePresenter<View> {
 
+    void onItemClick(BbcItem item);
   }
 }

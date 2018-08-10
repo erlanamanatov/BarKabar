@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.BbcItem;
+import com.erkprog.barkabar.ui.OnClickListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -17,9 +18,11 @@ import java.util.List;
 public class BbcAdapter extends RecyclerView.Adapter<BbcAdapter.BbcViewHolder> {
 
   private List<BbcItem> mData;
+  private OnClickListener<BbcItem> mListener;
 
-  BbcAdapter(List<BbcItem> data) {
+  BbcAdapter(List<BbcItem> data, OnClickListener<BbcItem> listener) {
     mData = data;
+    mListener = listener;
   }
 
   @NonNull
@@ -31,7 +34,7 @@ public class BbcAdapter extends RecyclerView.Adapter<BbcAdapter.BbcViewHolder> {
 
   @Override
   public void onBindViewHolder(@NonNull BbcViewHolder holder, int position) {
-    BbcItem item = mData.get(position);
+    final BbcItem item = mData.get(position);
     if (item != null) {
       holder.title.setText(item.getTitle());
       holder.description.setText(item.getDescription());
@@ -42,6 +45,15 @@ public class BbcAdapter extends RecyclerView.Adapter<BbcAdapter.BbcViewHolder> {
             .placeholder(R.drawable.ic_image_holder)
             .into(holder.image);
       }
+
+      holder.itemView.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+          if (mListener != null) {
+            mListener.onItemClick(item);
+          }
+        }
+      });
     }
   }
 

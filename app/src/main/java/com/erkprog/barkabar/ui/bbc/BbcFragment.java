@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,14 +18,16 @@ import com.erkprog.barkabar.data.entity.BbcItem;
 import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.network.bbcRepository.BbcClient;
 import com.erkprog.barkabar.ui.BaseFragment;
+import com.erkprog.barkabar.ui.OnClickListener;
+import com.thefinestartist.finestwebview.FinestWebView;
 
 import java.util.List;
 
 
-public class BbcFragment extends BaseFragment implements BbcContract.View {
+public class BbcFragment extends BaseFragment implements BbcContract.View, OnClickListener<BbcItem> {
   private static final String TAG = "BbcFragment";
 
-  private BbcPresenter mPresenter;
+  private BbcContract.Presenter mPresenter;
   private RecyclerView mRecyclerView;
   private BbcAdapter mAdapter;
   private ProgressBar mProgressBar;
@@ -85,8 +86,13 @@ public class BbcFragment extends BaseFragment implements BbcContract.View {
 
   @Override
   public void showFeed(List<BbcItem> data) {
-    mAdapter = new BbcAdapter(data);
+    mAdapter = new BbcAdapter(data, this);
     mRecyclerView.setAdapter(mAdapter);
+  }
+
+  @Override
+  public void showArticle(String link) {
+    new FinestWebView.Builder(getActivity()).show(link);
   }
 
   @Override
@@ -108,5 +114,10 @@ public class BbcFragment extends BaseFragment implements BbcContract.View {
   public void onDestroy() {
     super.onDestroy();
     mPresenter.unBind();
+  }
+
+  @Override
+  public void onItemClick(BbcItem item) {
+    mPresenter.onItemClick(item);
   }
 }

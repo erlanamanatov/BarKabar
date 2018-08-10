@@ -4,6 +4,7 @@ package com.erkprog.barkabar.ui.bbc;
 import android.util.Log;
 
 import com.erkprog.barkabar.data.entity.BbcFeed;
+import com.erkprog.barkabar.data.entity.BbcItem;
 import com.erkprog.barkabar.data.network.bbcRepository.BbcApi;
 
 import retrofit2.Call;
@@ -69,5 +70,14 @@ public class BbcPresenter implements BbcContract.Presenter {
   @Override
   public void unBind() {
     mView = null;
+  }
+
+  @Override
+  public void onItemClick(BbcItem item) {
+    if (item.getLink() != null) {
+      mView.showArticle(item.getLink());
+    } else {
+      mView.showMessage("Article is not available");
+    }
   }
 }
