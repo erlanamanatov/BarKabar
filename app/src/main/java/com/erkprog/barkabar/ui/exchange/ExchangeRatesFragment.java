@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.ExchangeRatesResponse;
@@ -21,13 +22,17 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 
-public class ExchangeRatesFragment extends Fragment {
+public class ExchangeRatesFragment extends Fragment implements ExRatesContract.View {
   private static final String TAG = "ExchangeRatesFragment";
+
+  private ExRatesContract.Presenter mPresenter;
 
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mPresenter = new ExRatesPresenter(ExRatesClient.getClient());
+    mPresenter.bind(this);
   }
 
   @Nullable
@@ -40,29 +45,48 @@ public class ExchangeRatesFragment extends Fragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
-    ExchangeRatesApi api = ExRatesClient.getClient();
-    api.getExchangeRates().enqueue(new Callback<ExchangeRatesResponse>() {
-      @Override
-      public void onResponse(Call<ExchangeRatesResponse> call, Response<ExchangeRatesResponse> response) {
-        Log.d(TAG, "onResponse: starts");
-        if (response.body().getCurrencyList() != null) {
-          List<ExchangeRatesResponse.Currency> list = response.body().getCurrencyList();
-          ExchangeRatesResponse.Currency currency = list.get(0);
-          Log.d(TAG, "onResponse: " + currency.getIsoCode() + " : " + currency.getValue());
-        } else {
-          Log.d(TAG, "onResponse: list is null");
-        }
-      }
-
-      @Override
-      public void onFailure(Call<ExchangeRatesResponse> call, Throwable t) {
-        Log.d(TAG, "onFailure: " + t.getMessage());
-      }
-    });
+    mPresenter.loadData();
   }
 
   public static ExchangeRatesFragment newInstance() {
     return new ExchangeRatesFragment();
+  }
+
+  @Override
+  public void showDate(String date) {
+    Log.d(TAG, "showDate: " + date);
+  }
+
+  @Override
+  public void showErrorDate() {
+
+  }
+
+  @Override
+  public void showCurrencies(List<ExchangeRatesResponse.Currency> currencyList) {
+    ExchangeRatesResponse.Currency currency = currencyList.get(0);
+    Log.d(TAG, "onResponse: " + currency.getIsoCode() + " : " + currency.getValue());
+
+  }
+
+  @Override
+  public void showErrorCurrencies() {
+
+  }
+
+  @Override
+  public void showMessage(String message) {
+    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+
+  }
+
+  @Override
+  public void showProgress() {
+
+  }
+
+  @Override
+  public void dismissProgress() {
+
   }
 }
