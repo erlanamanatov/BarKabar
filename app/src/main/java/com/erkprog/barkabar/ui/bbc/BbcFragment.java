@@ -7,28 +7,28 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
 import com.erkprog.barkabar.R;
-import com.erkprog.barkabar.data.entity.BbcFeed;
 import com.erkprog.barkabar.data.entity.BbcItem;
 import com.erkprog.barkabar.data.entity.Defaults;
-import com.erkprog.barkabar.data.network.bbcRepository.BbcApi;
 import com.erkprog.barkabar.data.network.bbcRepository.BbcClient;
 import com.erkprog.barkabar.ui.BaseFragment;
 
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class BbcFragment extends BaseFragment {
+public class BbcFragment extends BaseFragment implements BbcContract.View {
   private static final String TAG = "BbcFragment";
+
+  private BbcPresenter mPresenter;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    mPresenter = new BbcPresenter(BbcClient.getClient());
+    mPresenter.bind(this);
   }
 
   @Nullable
@@ -41,26 +41,7 @@ public class BbcFragment extends BaseFragment {
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-
-    BbcApi api = BbcClient.getClient();
-    api.loadBbcFeed().enqueue(new Callback<BbcFeed>() {
-      @Override
-      public void onResponse(Call<BbcFeed> call, Response<BbcFeed> response) {
-        Log.d(TAG, "onResponse: starts");
-        if (response.isSuccessful()) {
-           BbcItem item  = response.body().getData().get(0);
-          Log.d(TAG, "onResponse: " + item.getTitle());
-          Log.d(TAG, "onResponse: " + item.getDescription());
-          Log.d(TAG, "onResponse: " + item.getImgUrl());
-          Log.d(TAG, "onResponse: " + item.getLink());
-        }
-      }
-
-      @Override
-      public void onFailure(Call<BbcFeed> call, Throwable t) {
-        Log.d(TAG, "onFailure: " + t.getMessage());
-      }
-    });
+    mPresenter.loadData();
   }
 
   public static BbcFragment newInstance() {
@@ -80,5 +61,35 @@ public class BbcFragment extends BaseFragment {
   @Override
   public void customizeTab(PagerSlidingTabStrip tab) {
 
+  }
+
+  @Override
+  public void showFeed(List<BbcItem> data) {
+    BbcItem item = data.get(0);
+    Log.d(TAG, "server data: " + item.getTitle());
+    Log.d(TAG, "server data: " + item.getDescription());
+    Log.d(TAG, "server data: " + item.getImgUrl());
+    Log.d(TAG, "server data: " + item.getLink());
+  }
+
+  @Override
+  public void showMessage(String message) {
+    Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+  }
+
+  @Override
+  public void showProgress() {
+
+  }
+
+  @Override
+  public void dismissProgress() {
+
+  }
+
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    mPresenter.unBind();
   }
 }
