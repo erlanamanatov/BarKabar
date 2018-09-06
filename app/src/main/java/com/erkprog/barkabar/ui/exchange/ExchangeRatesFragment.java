@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.erkprog.barkabar.R;
@@ -26,6 +27,7 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   private static final String TAG = "ExchangeRatesFragment";
 
   private ExRatesContract.Presenter mPresenter;
+  private TextView usdValue;
 
 
   @Override
@@ -39,6 +41,7 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View v = inflater.inflate(R.layout.fragment_exchange_rates, container, false);
+    usdValue = v.findViewById(R.id.exch_usd_value);
     return v;
   }
 
@@ -64,8 +67,14 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
 
   @Override
   public void showCurrencies(List<ExchangeRatesResponse.Currency> currencyList) {
-    ExchangeRatesResponse.Currency currency = currencyList.get(0);
-    Log.d(TAG, "onResponse: " + currency.getIsoCode() + " : " + currency.getValue());
+//    ExchangeRatesResponse.Currency currency = currencyList.get(0);
+//    Log.d(TAG, "onResponse: " + currency.getIsoCode() + " : " + currency.getValue());
+
+    for (ExchangeRatesResponse.Currency currency: currencyList) {
+      if (currency.getIsoCode().equals("USD")) {
+        usdValue.setText(currency.getValue());
+      }
+    }
 
   }
 
