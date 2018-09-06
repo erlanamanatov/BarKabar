@@ -16,4 +16,7 @@
   <string name="exchange_rates">Exchange rates</string>
   <string name="official_exchange_rates">Official exchange rates</string>
   <string name="usd">USD</string>
+  <string name="eur">EUR</string>
+  <string name="kzt">KZT</string>
+  <string name="rub">RUB</string>
 </resources>

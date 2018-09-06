@@ -28,6 +28,9 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
 
   private ExRatesContract.Presenter mPresenter;
   private TextView usdValue;
+  private TextView eurValue;
+  private TextView kztValue;
+  private TextView rubValue;
 
 
   @Override
@@ -42,6 +45,9 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View v = inflater.inflate(R.layout.fragment_exchange_rates, container, false);
     usdValue = v.findViewById(R.id.exch_usd_value);
+    eurValue = v.findViewById(R.id.exch_eur_value);
+    kztValue = v.findViewById(R.id.exch_kzt_value);
+    rubValue = v.findViewById(R.id.exch_rub_value);
     return v;
   }
 
@@ -67,13 +73,25 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
 
   @Override
   public void showCurrencies(List<ExchangeRatesResponse.Currency> currencyList) {
-//    ExchangeRatesResponse.Currency currency = currencyList.get(0);
-//    Log.d(TAG, "onResponse: " + currency.getIsoCode() + " : " + currency.getValue());
+    for (ExchangeRatesResponse.Currency currency : currencyList) {
+      switch (currency.getIsoCode()) {
+        case "USD":
+          usdValue.setText(currency.getValue());
+          break;
 
-    for (ExchangeRatesResponse.Currency currency: currencyList) {
-      if (currency.getIsoCode().equals("USD")) {
-        usdValue.setText(currency.getValue());
+        case "EUR":
+          eurValue.setText(currency.getValue());
+          break;
+
+        case "KZT":
+          kztValue.setText(currency.getValue());
+          break;
+
+        case "RUB":
+          rubValue.setText(currency.getValue());
+          break;
       }
+
     }
 
   }
