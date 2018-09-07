@@ -2,6 +2,7 @@ package com.erkprog.barkabar.ui.kloop;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.erkprog.barkabar.util.Utils;
 import java.util.List;
 
 public class KloopAdapter extends RecyclerView.Adapter<KloopAdapter.KloopViewHolder> {
+  private static final String TAG = "KloopAdapter";
 
   private List<KloopItem> mData;
   private OnClickListener<KloopItem> mListener;
@@ -41,8 +43,14 @@ public class KloopAdapter extends RecyclerView.Adapter<KloopAdapter.KloopViewHol
       holder.author.setText(item.getCreatedBy());
       String description = item.getDescription();
       holder.description.setText(description != null ? Utils.getKloopDescription(description) : "");
+
+      Log.d(TAG, "onBindViewHolder: date" + item.getCreatedDate());
       String date = item.getCreatedDate();
-      holder.createdDate.setText(DateFormatter.getFormattedDate(date));
+      try {
+        holder.createdDate.setText(DateFormatter.getFormattedDate(date));
+      } catch (IllegalArgumentException e) {
+
+      }
 
       holder.itemView.setOnClickListener(new View.OnClickListener() {
         @Override

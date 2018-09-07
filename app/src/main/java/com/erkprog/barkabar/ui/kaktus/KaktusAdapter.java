@@ -2,6 +2,7 @@ package com.erkprog.barkabar.ui.kaktus;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusViewHolder> {
+  private static final String TAG = "KaktusAdapter";
 
   private List<KaktusItem> mData;
   private OnClickListener<KaktusItem> mListener;
@@ -41,8 +43,13 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
       holder.title.setText(item.getTitle());
       holder.description.setText(item.getDescription());
       if (item.getCreatedDate() != null) {
-        holder.date.setText(DateFormatter.getFormattedDate(item.getCreatedDate()));
+        try {
+          holder.date.setText(DateFormatter.getFormattedDate(item.getCreatedDate()));
+        } catch (IllegalArgumentException e) {
+
+        }
       }
+      Log.d(TAG, "onBindViewHolder: date" + item.getCreatedDate());
       if (item.getImgUrl() != null) {
         Picasso.get()
             .load(item.getImgUrl())
