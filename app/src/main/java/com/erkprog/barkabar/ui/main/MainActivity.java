@@ -87,3 +87,6 @@ public class MainActivity extends AppCompatActivity
         .commit();
   }
 }
+
+//TODO: fix toolbar in exchange rates fragment
+//TODO: save fragments state on screen rotation
