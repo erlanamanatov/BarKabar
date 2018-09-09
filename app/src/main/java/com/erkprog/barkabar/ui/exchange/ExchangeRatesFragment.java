@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,8 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   private TextView kztValue;
   private TextView rubValue;
 
+  private ProgressBar mProgressBar;
+
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -46,7 +49,8 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
     eurValue = v.findViewById(R.id.exch_eur_value);
     kztValue = v.findViewById(R.id.exch_kzt_value);
     rubValue = v.findViewById(R.id.exch_rub_value);
-
+    mProgressBar = v.findViewById(R.id.exch_progress_bar);
+    dismissProgress();
     return v;
   }
 
@@ -126,11 +130,11 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
 
   @Override
   public void showProgress() {
-
+    mProgressBar.setVisibility(View.VISIBLE);
   }
 
   @Override
   public void dismissProgress() {
-
+    mProgressBar.setVisibility(View.GONE);
   }
 }
