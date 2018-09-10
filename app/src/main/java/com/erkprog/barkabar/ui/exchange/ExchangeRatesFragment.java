@@ -1,5 +1,6 @@
 package com.erkprog.barkabar.ui.exchange;
 
+import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,9 +15,14 @@ import android.widget.Toast;
 
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.ExchangeRatesResponse;
+import com.erkprog.barkabar.data.entity.room.AppDatabase;
+import com.erkprog.barkabar.data.entity.room.CurrencyValues;
 import com.erkprog.barkabar.data.network.exchangeRatesRepository.ExRatesClient;
+import com.erkprog.barkabar.ui.main.MainActivity;
 
 import java.util.List;
+
+import static com.thefinestartist.utils.content.ContextUtil.getApplicationContext;
 
 public class ExchangeRatesFragment extends Fragment implements ExRatesContract.View {
   private static final String TAG = "ExchangeRatesFragment";
@@ -34,11 +40,18 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
 
   private ProgressBar mProgressBar;
 
+  private CurrencyValues mCurrencyValues;
+
+//  AppDatabase mDatabase;
+
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mPresenter = new ExRatesPresenter(ExRatesClient.getClient());
     mPresenter.bind(this);
+
+
+    mCurrencyValues = new CurrencyValues();
   }
 
   @Nullable
@@ -57,6 +70,8 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
+//    mDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "db")
+//        .allowMainThreadQueries().build();
     if (savedInstanceState == null) {
       mPresenter.loadData();
     } else {
@@ -86,6 +101,7 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
 
   @Override
   public void showDate(String date) {
+    mCurrencyValues.setDate(date);
     Log.d(TAG, "showDate: " + date);
   }
 
@@ -100,22 +116,30 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
       switch (currency.getIsoCode()) {
         case USD:
           usdValue.setText(currency.getValue());
+          mCurrencyValues.setUsd(currency.getValue());
           break;
 
         case EUR:
           eurValue.setText(currency.getValue());
+          mCurrencyValues.setEur(currency.getValue());
           break;
 
         case KZT:
           kztValue.setText(currency.getValue());
+          mCurrencyValues.setKzt(currency.getValue());
           break;
 
         case RUB:
           rubValue.setText(currency.getValue());
+          mCurrencyValues.setRub(currency.getValue());
           break;
       }
     }
+    Log.d(TAG, "showCurrencies: currencyValues " + mCurrencyValues);
+    MainActivity.mDatabase.currencyValuesDao().addValues(mCurrencyValues);
+    Log.d(TAG, "showCurrencies: saved to database");
   }
+
 
   @Override
   public void showErrorCurrencies() {

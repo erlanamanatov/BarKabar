@@ -36,6 +36,7 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
             mView.dismissProgress();
 
             if (response.isSuccessful() && response.body() != null) {
+
               if (response.body().getDate() != null) {
                 mView.showDate(response.body().getDate());
               } else {

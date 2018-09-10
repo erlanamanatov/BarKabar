@@ -17,6 +17,7 @@ public interface ExRatesContract {
     void showCurrencies(List<ExchangeRatesResponse.Currency> currencyList);
 
     void showErrorCurrencies();
+
   }
   
   interface Presenter extends BasePresenter<View> {

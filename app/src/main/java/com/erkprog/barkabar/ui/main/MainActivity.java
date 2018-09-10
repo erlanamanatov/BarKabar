@@ -1,5 +1,6 @@
 package com.erkprog.barkabar.ui.main;
 
+import android.arch.persistence.room.Room;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.design.widget.NavigationView;
@@ -12,11 +13,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.erkprog.barkabar.R;
+import com.erkprog.barkabar.data.entity.room.AppDatabase;
 import com.erkprog.barkabar.ui.settings.SettingsActivity;
 import com.erkprog.barkabar.ui.exchange.ExchangeRatesFragment;
 
+import static com.thefinestartist.utils.content.ContextUtil.getApplicationContext;
+
 public class MainActivity extends AppCompatActivity
     implements NavigationView.OnNavigationItemSelectedListener {
+
+  public static AppDatabase mDatabase;
+
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +40,11 @@ public class MainActivity extends AppCompatActivity
 
     NavigationView navigationView = findViewById(R.id.nav_view);
     navigationView.setNavigationItemSelectedListener(this);
+
+    mDatabase = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "apppdb.db")
+        .allowMainThreadQueries().build();
+
+
 
     if (savedInstanceState == null) {
       switchFragment(TabsFragment.newInstance());
