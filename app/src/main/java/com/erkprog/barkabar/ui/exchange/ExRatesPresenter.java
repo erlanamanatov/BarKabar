@@ -64,11 +64,7 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
           }
         }
       });
-
-
     }
-
-
   }
 
   @Override
