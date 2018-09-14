@@ -10,4 +10,9 @@ public class Defaults {
   public static final String SPUTNIK_SOURCE_NAME = "sputnik.kg";
   public static final String KAKTUS_SOURCE_NAME = "kaktus.media";
   public static final String BBC_SOURCE_NAME = "bbc.com/news";
+
+  public static final String USD = "USD";
+  public static final String EUR = "EUR";
+  public static final String KZT = "KZT";
+  public static final String RUB = "RUB";
 }

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import com.erkprog.barkabar.AppApplication;
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.db.AppDatabase;
+import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.ExchangeRatesResponse;
 import com.erkprog.barkabar.data.entity.room.CurrencyValues;
 import com.erkprog.barkabar.data.network.exchangeRatesRepository.ExRatesClient;
@@ -24,10 +25,7 @@ import java.util.List;
 public class ExchangeRatesFragment extends Fragment implements ExRatesContract.View {
   private static final String TAG = "ExchangeRatesFragment";
 
-  public static final String USD = "USD";
-  public static final String EUR = "EUR";
-  public static final String KZT = "KZT";
-  public static final String RUB = "RUB";
+
 
   private ExRatesContract.Presenter mPresenter;
   private TextView usdValue;
@@ -39,12 +37,12 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
 
   private CurrencyValues mCurrencyValues;
 
-  AppDatabase mDatabase;
+//  AppDatabase mDatabase;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mPresenter = new ExRatesPresenter(ExRatesClient.getClient());
+    mPresenter = new ExRatesPresenter(ExRatesClient.getClient(), AppApplication.getInstance().getDatabase());
     mPresenter.bind(this);
     mCurrencyValues = new CurrencyValues();
   }
@@ -65,14 +63,14 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-    mDatabase = AppApplication.getInstance().getDatabase();
+//    mDatabase = AppApplication.getInstance().getDatabase();
     if (savedInstanceState == null) {
       mPresenter.loadData();
     } else {
-      usdValue.setText(savedInstanceState.getString(USD));
-      eurValue.setText(savedInstanceState.getString(EUR));
-      kztValue.setText(savedInstanceState.getString(KZT));
-      rubValue.setText(savedInstanceState.getString(RUB));
+      usdValue.setText(savedInstanceState.getString(Defaults.USD));
+      eurValue.setText(savedInstanceState.getString(Defaults.EUR));
+      kztValue.setText(savedInstanceState.getString(Defaults.KZT));
+      rubValue.setText(savedInstanceState.getString(Defaults.RUB));
     }
   }
 
@@ -83,10 +81,10 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   }
 
   private void saveCurrencyValues(Bundle outState) {
-    outState.putString(USD, usdValue.getText().toString());
-    outState.putString(EUR, eurValue.getText().toString());
-    outState.putString(KZT, kztValue.getText().toString());
-    outState.putString(RUB, rubValue.getText().toString());
+    outState.putString(Defaults.USD, usdValue.getText().toString());
+    outState.putString(Defaults.EUR, eurValue.getText().toString());
+    outState.putString(Defaults.KZT, kztValue.getText().toString());
+    outState.putString(Defaults.RUB, rubValue.getText().toString());
   }
 
   public static ExchangeRatesFragment newInstance() {
@@ -108,29 +106,29 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   public void showCurrencies(List<ExchangeRatesResponse.Currency> currencyList) {
     for (ExchangeRatesResponse.Currency currency : currencyList) {
       switch (currency.getIsoCode()) {
-        case USD:
+        case Defaults.USD:
           usdValue.setText(currency.getValue());
           mCurrencyValues.setUsd(currency.getValue());
           break;
 
-        case EUR:
+        case Defaults.EUR:
           eurValue.setText(currency.getValue());
           mCurrencyValues.setEur(currency.getValue());
           break;
 
-        case KZT:
+        case Defaults.KZT:
           kztValue.setText(currency.getValue());
           mCurrencyValues.setKzt(currency.getValue());
           break;
 
-        case RUB:
+        case Defaults.RUB:
           rubValue.setText(currency.getValue());
           mCurrencyValues.setRub(currency.getValue());
           break;
       }
     }
     Log.d(TAG, "showCurrencies: currencyValues " + mCurrencyValues);
-    mDatabase.currencyValuesDao().addValues(mCurrencyValues);
+//    mDatabase.currencyValuesDao().addValues(mCurrencyValues);
     Log.d(TAG, "showCurrencies: saved to database");
   }
 

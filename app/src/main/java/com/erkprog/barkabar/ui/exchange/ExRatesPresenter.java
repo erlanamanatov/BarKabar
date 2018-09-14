@@ -2,8 +2,13 @@ package com.erkprog.barkabar.ui.exchange;
 
 import android.util.Log;
 
+import com.erkprog.barkabar.data.db.AppDatabase;
+import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.ExchangeRatesResponse;
+import com.erkprog.barkabar.data.entity.room.CurrencyValues;
 import com.erkprog.barkabar.data.network.exchangeRatesRepository.ExchangeRatesApi;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,9 +19,11 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
 
   private ExRatesContract.View mView;
   private ExchangeRatesApi mService;
+  private AppDatabase mDatabase;
 
-  ExRatesPresenter(ExchangeRatesApi api) {
+  ExRatesPresenter(ExchangeRatesApi api, AppDatabase database) {
     mService = api;
+    mDatabase = database;
   }
 
   @Override
@@ -44,6 +51,7 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
               }
 
               if (response.body().getCurrencyList() != null) {
+                saveCurrenciesToDB(response.body().getCurrencyList(), response.body().getDate());
                 mView.showCurrencies(response.body().getCurrencyList());
               } else {
                 mView.showErrorCurrencies();
@@ -65,6 +73,35 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
         }
       });
     }
+  }
+
+  private void saveCurrenciesToDB(List<ExchangeRatesResponse.Currency> currencies, String date) {
+    CurrencyValues currencyValues = new CurrencyValues();
+
+    currencyValues.setDate(date != null ? date : "");
+
+    for (ExchangeRatesResponse.Currency currency: currencies) {
+      switch (currency.getIsoCode()) {
+        case Defaults.USD:
+          currencyValues.setUsd(currency.getValue());
+          break;
+
+        case Defaults.EUR:
+          currencyValues.setEur(currency.getValue());
+          break;
+
+        case Defaults.KZT:
+          currencyValues.setKzt(currency.getValue());
+          break;
+
+        case Defaults.RUB:
+          currencyValues.setRub(currency.getValue());
+          break;
+      }
+    }
+
+    mDatabase.currencyValuesDao().addValues(currencyValues);
+
   }
 
   @Override
