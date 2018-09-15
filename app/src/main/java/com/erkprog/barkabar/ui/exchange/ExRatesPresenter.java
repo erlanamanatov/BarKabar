@@ -8,7 +8,9 @@ import com.erkprog.barkabar.data.entity.ExchangeRatesResponse;
 import com.erkprog.barkabar.data.entity.room.CurrencyValues;
 import com.erkprog.barkabar.data.network.exchangeRatesRepository.ExchangeRatesApi;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -39,15 +41,18 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
   public void loadData() {
     mView.showProgress();
 
-    mDatabase.currencyValuesDao().getByDate("15.09.2018")
+    String date = getCurrentDate();
+    Log.d(TAG, "loadData: current date formatted to String : " + date);
+
+    mDatabase.currencyValuesDao().getByDate(date)
         .subscribeOn(Schedulers.io())
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(new DisposableMaybeObserver<CurrencyValues>() {
           @Override
           public void onSuccess(CurrencyValues currencyValues) {
             if (isAttached()) {
-              mView.dismissProgress();
               Log.d(TAG, "onSuccess: currencies available from DB");
+              mView.dismissProgress();
               mView.showDate(currencyValues.getDate());
               mView.showCurrencies(formList(currencyValues));
             }
@@ -56,7 +61,8 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
           @Override
           public void onError(Throwable e) {
             if (isAttached()) {
-              mView.dismissProgress();
+              Log.d(TAG, "onError: DB error");
+              getDataFromServer();
             }
           }
 
@@ -68,6 +74,11 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
             }
           }
         });
+  }
+
+  private String getCurrentDate() {
+    SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+    return formatter.format(Calendar.getInstance().getTime());
   }
 
   private void getDataFromServer() {
