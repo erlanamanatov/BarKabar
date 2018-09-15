@@ -1,5 +1,6 @@
 package com.erkprog.barkabar.ui.kaktus;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,6 +14,7 @@ import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.KaktusItem;
 import com.erkprog.barkabar.ui.OnClickListener;
 import com.erkprog.barkabar.util.DateFormatter;
+import com.erkprog.barkabar.util.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -22,10 +24,12 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
 
   private List<KaktusItem> mData;
   private OnClickListener<KaktusItem> mListener;
+  private Context mContext;
 
-  KaktusAdapter(List<KaktusItem> data, OnClickListener<KaktusItem> listener) {
+  KaktusAdapter(List<KaktusItem> data, OnClickListener<KaktusItem> listener, Context context) {
     mData = data;
     mListener = listener;
+    mContext = context;
   }
 
   @NonNull
@@ -39,6 +43,11 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
   @Override
   public void onBindViewHolder(@NonNull KaktusViewHolder holder, int position) {
     final KaktusItem item = mData.get(position);
+    holder.title.setText("");
+    holder.description.setText("");
+    holder.date.setText("");
+    holder.image.setImageResource(R.drawable.ic_image_holder);
+
     if (item != null) {
       holder.title.setText(item.getTitle());
       holder.description.setText(item.getDescription());
@@ -55,7 +64,9 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
             .load(item.getImgUrl())
             .error(R.drawable.ic_image_holder)
             .placeholder(R.drawable.ic_image_holder)
-            .into(holder.image);
+            .into(new ImageLoader("kaktus", holder.image, mContext));
+      } else {
+        holder.image.setVisibility(View.GONE);
       }
       holder.itemView.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -80,7 +91,7 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
     private ImageView image;
     private TextView date;
 
-    public KaktusViewHolder(View itemView) {
+    KaktusViewHolder(View itemView) {
       super(itemView);
       title = itemView.findViewById(R.id.kt_item_title);
       description = itemView.findViewById(R.id.kt_item_description);

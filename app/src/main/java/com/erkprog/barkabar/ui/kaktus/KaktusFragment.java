@@ -68,7 +68,7 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View,
 
   @Override
   public void showFeed(List<KaktusItem> data) {
-    mAdapter = new KaktusAdapter(data, this);
+    mAdapter = new KaktusAdapter(data, this, requireContext());
     mRecyclerView.setAdapter(mAdapter);
   }
 
