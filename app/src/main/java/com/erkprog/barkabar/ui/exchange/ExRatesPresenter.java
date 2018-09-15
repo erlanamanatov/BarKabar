@@ -8,6 +8,7 @@ import com.erkprog.barkabar.data.entity.ExchangeRatesResponse;
 import com.erkprog.barkabar.data.entity.room.CurrencyValues;
 import com.erkprog.barkabar.data.network.exchangeRatesRepository.ExchangeRatesApi;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -36,6 +37,7 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
 
   @Override
   public void loadData() {
+    mView.showProgress();
 
     mDatabase.currencyValuesDao().getByDate("15.09.2018")
         .subscribeOn(Schedulers.io())
@@ -43,20 +45,32 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
         .subscribe(new DisposableMaybeObserver<CurrencyValues>() {
           @Override
           public void onSuccess(CurrencyValues currencyValues) {
-            Log.d(TAG, "onSuccess: found in DB");
+            if (isAttached()) {
+              mView.dismissProgress();
+              Log.d(TAG, "onSuccess: currencies available from DB");
+              mView.showDate(currencyValues.getDate());
+              mView.showCurrencies(formList(currencyValues));
+            }
           }
 
           @Override
           public void onError(Throwable e) {
+            if (isAttached()) {
+              mView.dismissProgress();
+            }
           }
 
           @Override
           public void onComplete() {
-            Log.d(TAG, "onComplete: no matches in DB");
+            if (isAttached()) {
+              Log.d(TAG, "onComplete: no matches in DB");
+              getDataFromServer();
+            }
           }
         });
+  }
 
-
+  private void getDataFromServer() {
     if (mService != null) {
       mView.showProgress();
 
@@ -96,7 +110,18 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
           }
         }
       });
+    } else {
+      mView.dismissProgress();
     }
+  }
+
+  private List<ExchangeRatesResponse.Currency> formList(CurrencyValues currencyValues) {
+    List<ExchangeRatesResponse.Currency> result = new ArrayList<>();
+    result.add(new ExchangeRatesResponse.Currency(Defaults.USD, currencyValues.getUsd()));
+    result.add(new ExchangeRatesResponse.Currency(Defaults.EUR, currencyValues.getEur()));
+    result.add(new ExchangeRatesResponse.Currency(Defaults.KZT, currencyValues.getKzt()));
+    result.add(new ExchangeRatesResponse.Currency(Defaults.RUB, currencyValues.getRub()));
+    return result;
   }
 
   private void saveCurrenciesToDB(List<ExchangeRatesResponse.Currency> currencies, String date) {
@@ -104,7 +129,7 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
 
     currencyValues.setDate(date != null ? date : "");
 
-    for (ExchangeRatesResponse.Currency currency: currencies) {
+    for (ExchangeRatesResponse.Currency currency : currencies) {
       switch (currency.getIsoCode()) {
         case Defaults.USD:
           currencyValues.setUsd(currency.getValue());

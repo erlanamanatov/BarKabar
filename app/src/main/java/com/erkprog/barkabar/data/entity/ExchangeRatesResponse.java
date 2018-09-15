@@ -41,6 +41,15 @@ public class ExchangeRatesResponse {
     @Element(name = "Value", required = false)
     private String value;
 
+    public Currency() {
+
+    }
+
+    public Currency(String isoCode, String value) {
+      this.isoCode = isoCode;
+      this.value = value;
+    }
+
     public String getValue() {
       return value;
     }
