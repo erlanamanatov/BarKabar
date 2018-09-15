@@ -39,6 +39,10 @@ dependencies {
 
   implementation "android.arch.persistence.room:runtime:$room_version"
   annotationProcessor "android.arch.persistence.room:compiler:$room_version"
+  implementation "android.arch.persistence.room:rxjava2:$room_version"
+
+  implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+  implementation 'io.reactivex.rxjava2:rxjava:2.2.2'
 
   debugImplementation 'com.amitshekhar.android:debug-db:1.0.4'
 }

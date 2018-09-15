@@ -10,6 +10,9 @@ import com.erkprog.barkabar.data.network.exchangeRatesRepository.ExchangeRatesAp
 
 import java.util.List;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.observers.DisposableMaybeObserver;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +36,27 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
 
   @Override
   public void loadData() {
+
+    mDatabase.currencyValuesDao().getByDate("15.09.2018")
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(new DisposableMaybeObserver<CurrencyValues>() {
+          @Override
+          public void onSuccess(CurrencyValues currencyValues) {
+            Log.d(TAG, "onSuccess: found in DB");
+          }
+
+          @Override
+          public void onError(Throwable e) {
+          }
+
+          @Override
+          public void onComplete() {
+            Log.d(TAG, "onComplete: no matches in DB");
+          }
+        });
+
+
     if (mService != null) {
       mView.showProgress();
 
