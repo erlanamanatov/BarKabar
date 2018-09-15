@@ -128,8 +128,6 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
       }
     }
     Log.d(TAG, "showCurrencies: currencyValues " + mCurrencyValues);
-//    mDatabase.currencyValuesDao().addValues(mCurrencyValues);
-    Log.d(TAG, "showCurrencies: saved to database");
   }
 
 

@@ -13,7 +13,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
 import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
@@ -136,8 +140,34 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
   }
 
   private void saveCurrenciesToDB(List<ExchangeRatesResponse.Currency> currencies, String date) {
-    CurrencyValues currencyValues = new CurrencyValues();
+    final CurrencyValues currencyValues = formCurrencyValues(currencies, date);
 
+    Completable.fromAction(new Action() {
+      @Override
+      public void run() throws Exception {
+        mDatabase.currencyValuesDao().addValues(currencyValues);
+      }
+    }).observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+          }
+
+          @Override
+          public void onComplete() {
+            Log.d(TAG, "save currencies to DB: onComplete: currencyValues saved to DB");
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.d(TAG, "save currencies ot DB: onError: starts");
+          }
+        });
+  }
+
+  private CurrencyValues formCurrencyValues(List<ExchangeRatesResponse.Currency> currencies, String date) {
+    CurrencyValues currencyValues = new CurrencyValues();
     currencyValues.setDate(date != null ? date : "");
 
     for (ExchangeRatesResponse.Currency currency : currencies) {
@@ -160,8 +190,7 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
       }
     }
 
-    mDatabase.currencyValuesDao().addValues(currencyValues);
-
+    return currencyValues;
   }
 
   @Override
