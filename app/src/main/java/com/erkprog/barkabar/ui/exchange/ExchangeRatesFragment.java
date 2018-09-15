@@ -25,19 +25,13 @@ import java.util.List;
 public class ExchangeRatesFragment extends Fragment implements ExRatesContract.View {
   private static final String TAG = "ExchangeRatesFragment";
 
-
-
   private ExRatesContract.Presenter mPresenter;
   private TextView usdValue;
   private TextView eurValue;
   private TextView kztValue;
   private TextView rubValue;
-
   private ProgressBar mProgressBar;
-
   private CurrencyValues mCurrencyValues;
-
-//  AppDatabase mDatabase;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -63,7 +57,6 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   @Override
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
-//    mDatabase = AppApplication.getInstance().getDatabase();
     if (savedInstanceState == null) {
       mPresenter.loadData();
     } else {
@@ -139,7 +132,6 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   @Override
   public void showMessage(String message) {
     Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
-
   }
 
   @Override

@@ -87,7 +87,6 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
 
   private void getDataFromServer() {
     if (mService != null) {
-      mView.showProgress();
 
       mService.getExchangeRates().enqueue(new Callback<ExchangeRatesResponse>() {
         @Override
@@ -126,17 +125,9 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
         }
       });
     } else {
+      Log.d(TAG, "getDataFromServer: service is null");
       mView.dismissProgress();
     }
-  }
-
-  private List<ExchangeRatesResponse.Currency> formList(CurrencyValues currencyValues) {
-    List<ExchangeRatesResponse.Currency> result = new ArrayList<>();
-    result.add(new ExchangeRatesResponse.Currency(Defaults.USD, currencyValues.getUsd()));
-    result.add(new ExchangeRatesResponse.Currency(Defaults.EUR, currencyValues.getEur()));
-    result.add(new ExchangeRatesResponse.Currency(Defaults.KZT, currencyValues.getKzt()));
-    result.add(new ExchangeRatesResponse.Currency(Defaults.RUB, currencyValues.getRub()));
-    return result;
   }
 
   private void saveCurrenciesToDB(List<ExchangeRatesResponse.Currency> currencies, String date) {
@@ -164,6 +155,15 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
             Log.d(TAG, "save currencies ot DB: onError: starts");
           }
         });
+  }
+
+  private List<ExchangeRatesResponse.Currency> formList(CurrencyValues currencyValues) {
+    List<ExchangeRatesResponse.Currency> result = new ArrayList<>();
+    result.add(new ExchangeRatesResponse.Currency(Defaults.USD, currencyValues.getUsd()));
+    result.add(new ExchangeRatesResponse.Currency(Defaults.EUR, currencyValues.getEur()));
+    result.add(new ExchangeRatesResponse.Currency(Defaults.KZT, currencyValues.getKzt()));
+    result.add(new ExchangeRatesResponse.Currency(Defaults.RUB, currencyValues.getRub()));
+    return result;
   }
 
   private CurrencyValues formCurrencyValues(List<ExchangeRatesResponse.Currency> currencies, String date) {
