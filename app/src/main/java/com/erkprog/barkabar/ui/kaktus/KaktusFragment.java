@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.erkprog.barkabar.AppApplication;
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.KaktusItem;
@@ -56,7 +57,7 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View,
   }
 
   private void initPresenter() {
-    mPresenter = new KaktusPresenter(KaktusClient.getClient());
+    mPresenter = new KaktusPresenter(KaktusClient.getClient(), AppApplication.getInstance().getDatabase());
     mPresenter.bind(this);
   }
 
