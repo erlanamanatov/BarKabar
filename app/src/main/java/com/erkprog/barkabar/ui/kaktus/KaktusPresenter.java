@@ -86,12 +86,14 @@ public class KaktusPresenter implements KaktusContract.Presenter {
         Log.d(TAG, "run: datasize: " + data.size());
         int i = 1;
         for (KaktusItem item : data) {
-          Log.d(TAG, "run: " + i);
+          Log.d(TAG, "run: " + i + ", " + item.isLocallyAvailable());
           FeedImage mImage = mDatabase.imageDao().findById(item.getGuid());
           if (mImage == null) {
             Log.d(TAG, "run: null");
           } else {
             Log.d(TAG, "run: " + mImage.getPath());
+            item.setImgSource(mImage.getPath());
+            item.setLocallyAvailable(true);
           }
           i++;
         }

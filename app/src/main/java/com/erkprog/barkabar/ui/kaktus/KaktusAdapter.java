@@ -3,7 +3,6 @@ package com.erkprog.barkabar.ui.kaktus;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +16,7 @@ import com.erkprog.barkabar.util.DateFormatter;
 import com.erkprog.barkabar.util.ImageLoader;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusViewHolder> {
@@ -59,9 +59,17 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
         }
       }
 //      Log.d(TAG, "onBindViewHolder: date" + item.getCreatedDate());
-      if (item.getImgUrl() != null) {
+      if (item.getImgSource() != null) {
+        if (item.isLocallyAvailable()) {
+          File f = new File(item.getImgSource());
+          Picasso.get()
+              .load(f)
+              .error(R.drawable.ic_image_holder)
+              .placeholder(R.drawable.ic_image_holder)
+              .into(holder.image);
+        }
         Picasso.get()
-            .load(item.getImgUrl())
+            .load(item.getImgSource())
             .error(R.drawable.ic_image_holder)
             .placeholder(R.drawable.ic_image_holder)
             .into(new ImageLoader("kaktus", holder.image, item.getGuid(), mContext));

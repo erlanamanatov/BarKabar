@@ -25,7 +25,9 @@ public class KaktusItem {
 
   @Path("enclosure")
   @Attribute(name = "url", required = false)
-  String imgUrl;
+  String imgSource;
+
+  boolean locallyAvailable;
 
   public String getTitle() {
     return mTitle;
@@ -59,12 +61,12 @@ public class KaktusItem {
     this.description = description;
   }
 
-  public String getImgUrl() {
-    return imgUrl;
+  public String getImgSource() {
+    return imgSource;
   }
 
-  public void setImgUrl(String imgUrl) {
-    this.imgUrl = imgUrl;
+  public void setImgSource(String imgSource) {
+    this.imgSource = imgSource;
   }
 
   public String getGuid() {
@@ -73,5 +75,22 @@ public class KaktusItem {
 
   public void setGuid(String guid) {
     this.guid = guid;
+  }
+
+  public boolean isLocallyAvailable() {
+    return locallyAvailable;
+  }
+
+  public void setLocallyAvailable(boolean locallyAvailable) {
+    this.locallyAvailable = locallyAvailable;
+  }
+
+  @Override
+  public String toString() {
+    return "KaktusItem{" +
+        "mTitle='" + mTitle + '\'' +
+        ", imgSource='" + imgSource + '\'' +
+        ", locallyAvailable=" + locallyAvailable +
+        '}';
   }
 }
