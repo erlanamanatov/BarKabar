@@ -9,11 +9,19 @@ import android.widget.ImageView;
 
 import com.erkprog.barkabar.AppApplication;
 import com.erkprog.barkabar.data.db.AppDatabase;
+import com.erkprog.barkabar.data.entity.room.FeedImage;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.FileOutputStream;
+
+import io.reactivex.Completable;
+import io.reactivex.CompletableObserver;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Action;
+import io.reactivex.schedulers.Schedulers;
 
 public class ImageLoader implements Target {
   private static final String TAG = "ImageLoader";
@@ -47,6 +55,7 @@ public class ImageLoader implements Target {
       bitmap.compress(Bitmap.CompressFormat.JPEG, 85, ostream);
       ostream.close();
       imageView.setImageBitmap(bitmap);
+      saveImagePathToDB(new FeedImage(guid, file.getAbsolutePath()));
       Log.d(TAG, "onBitmapLoaded: ends");
     } catch (Exception e) {
       e.printStackTrace();
@@ -68,5 +77,30 @@ public class ImageLoader implements Target {
     }
 
     return fileName;
+  }
+
+  private void saveImagePathToDB(final FeedImage image) {
+    Completable.fromAction(new Action() {
+      @Override
+      public void run() throws Exception {
+        mDatabase.imageDao().addImage(image);
+      }
+    }).observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+          }
+
+          @Override
+          public void onComplete() {
+            Log.d(TAG, "save imagePath to DB: onComplete: path saved to DB");
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.d(TAG, "save imagePath to DB: onError: " + e.getMessage());
+          }
+        });
   }
 }
