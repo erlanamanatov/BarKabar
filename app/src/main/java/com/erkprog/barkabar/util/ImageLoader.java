@@ -7,6 +7,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.widget.ImageView;
 
+import com.erkprog.barkabar.AppApplication;
+import com.erkprog.barkabar.data.db.AppDatabase;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -18,11 +20,16 @@ public class ImageLoader implements Target {
   private final String name;
   private ImageView imageView;
   private Context context;
+  private String guid;
 
-  public ImageLoader(String name, ImageView imageView, Context context) {
+  private AppDatabase mDatabase;
+
+  public ImageLoader(String name, ImageView imageView, String guid, Context context) {
     this.name = name;
     this.imageView = imageView;
+    this.guid = guid;
     this.context = context;
+    mDatabase = AppApplication.getInstance().getDatabase();
   }
 
   @Override

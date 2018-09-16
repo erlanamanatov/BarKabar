@@ -152,7 +152,7 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
 
           @Override
           public void onError(Throwable e) {
-            Log.d(TAG, "save currencies ot DB: onError: starts");
+            Log.d(TAG, "save currencies to DB: onError: " + e.getMessage());
           }
         });
   }

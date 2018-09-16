@@ -58,13 +58,13 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
 
         }
       }
-      Log.d(TAG, "onBindViewHolder: date" + item.getCreatedDate());
+//      Log.d(TAG, "onBindViewHolder: date" + item.getCreatedDate());
       if (item.getImgUrl() != null) {
         Picasso.get()
             .load(item.getImgUrl())
             .error(R.drawable.ic_image_holder)
             .placeholder(R.drawable.ic_image_holder)
-            .into(new ImageLoader("kaktus", holder.image, mContext));
+            .into(new ImageLoader("kaktus", holder.image, item.getGuid(), mContext));
       } else {
         holder.image.setVisibility(View.GONE);
       }

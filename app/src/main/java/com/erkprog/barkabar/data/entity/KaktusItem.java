@@ -14,6 +14,9 @@ public class KaktusItem {
   @Element(name = "link", required = false)
   String mLink;
 
+  @Element(name = "guid", required = false)
+  String guid;
+
   @Element(name = "pubDate", required = false)
   String createdDate;
 
@@ -62,5 +65,13 @@ public class KaktusItem {
 
   public void setImgUrl(String imgUrl) {
     this.imgUrl = imgUrl;
+  }
+
+  public String getGuid() {
+    return guid;
+  }
+
+  public void setGuid(String guid) {
+    this.guid = guid;
   }
 }

@@ -7,7 +7,6 @@ import retrofit2.http.GET;
 
 public interface KaktusApi {
 
-
   @GET("?rss")
   Call<KaktusFeed> loadKaktusFeed();
 }
