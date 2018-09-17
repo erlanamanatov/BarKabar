@@ -56,7 +56,6 @@ public class KaktusPresenter implements KaktusContract.Presenter {
 
               if (response.body().getData() != null && response.body().getData().size() != 0) {
                 checkForImagesInDB(response.body().getData());
-//                mView.showFeed(response.body().getData());
               } else {
                 Log.d(TAG, "onResponse: Data is null or size is 0");
               }
@@ -79,23 +78,18 @@ public class KaktusPresenter implements KaktusContract.Presenter {
   }
 
   private void checkForImagesInDB(final List<KaktusItem> data) {
+    Log.d(TAG, "checkForImagesInDB: starts");
 
     Completable.fromAction(new Action() {
       @Override
       public void run() throws Exception {
-        Log.d(TAG, "run: datasize: " + data.size());
-        int i = 1;
+        Log.d(TAG, "checkForImagesInDB: items count from server: " + data.size());
         for (KaktusItem item : data) {
-          Log.d(TAG, "run: " + i + ", " + item.isLocallyAvailable());
           FeedImage mImage = mDatabase.imageDao().findById(item.getGuid());
-          if (mImage == null) {
-            Log.d(TAG, "run: null");
-          } else {
-            Log.d(TAG, "run: " + mImage.getPath());
+          if (mImage != null) {
             item.setImgSource(mImage.getPath());
             item.setLocallyAvailable(true);
           }
-          i++;
         }
       }
     }).observeOn(AndroidSchedulers.mainThread())

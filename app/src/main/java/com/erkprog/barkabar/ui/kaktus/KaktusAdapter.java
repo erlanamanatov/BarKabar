@@ -3,6 +3,7 @@ package com.erkprog.barkabar.ui.kaktus;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,7 +59,6 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
 
         }
       }
-//      Log.d(TAG, "onBindViewHolder: date" + item.getCreatedDate());
       if (item.getImgSource() != null) {
         if (item.isLocallyAvailable()) {
           File f = new File(item.getImgSource());
@@ -67,12 +67,15 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
               .error(R.drawable.ic_image_holder)
               .placeholder(R.drawable.ic_image_holder)
               .into(holder.image);
+        } else {
+          Log.d(TAG, "onBindViewHolder: image not available from db, loading new from " +
+              item.getImgSource());
+          Picasso.get()
+              .load(item.getImgSource())
+              .error(R.drawable.ic_image_holder)
+              .placeholder(R.drawable.ic_image_holder)
+              .into(new ImageLoader("kaktus", holder.image, item.getGuid(), mContext));
         }
-        Picasso.get()
-            .load(item.getImgSource())
-            .error(R.drawable.ic_image_holder)
-            .placeholder(R.drawable.ic_image_holder)
-            .into(new ImageLoader("kaktus", holder.image, item.getGuid(), mContext));
       } else {
         holder.image.setVisibility(View.GONE);
       }

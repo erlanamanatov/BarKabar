@@ -50,16 +50,16 @@ public class ImageLoader implements Target {
     File file = new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES),
         genName(name));
     try {
+      imageView.setImageBitmap(bitmap);
       file.createNewFile();
       FileOutputStream ostream = new FileOutputStream(file);
-      bitmap.compress(Bitmap.CompressFormat.JPEG, 85, ostream);
+      bitmap.compress(Bitmap.CompressFormat.JPEG, 90, ostream);
       ostream.close();
-      imageView.setImageBitmap(bitmap);
       saveImagePathToDB(new FeedImage(guid, file.getAbsolutePath()));
       Log.d(TAG, "onBitmapLoaded: ends");
     } catch (Exception e) {
       e.printStackTrace();
-      Log.d(TAG, "onBitmapLoaded: exception starts " + e.getMessage());
+      Log.d(TAG, "onBitmapLoaded: exception: " + e.getMessage());
     }
   }
 
@@ -69,7 +69,7 @@ public class ImageLoader implements Target {
   }
 
   private String genName(String feed) {
-    String fileName = feed + (int) (Math.random() * 1000) + ".jpg";
+    String fileName = feed + (int) (Math.random() * 5000) + ".jpeg";
     File file = new File(fileName);
 
     if (file.exists()) {
