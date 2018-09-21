@@ -77,6 +77,8 @@ public class ImageRepository {
           @Override
           public void onDownloadComplete() {
             Log.d(TAG, "onDownloadComplete: starting saving to DB");
+            item.setLocallyAvailable(true);
+            item.setImgSource(dirPath + "/" + fileName);
             saveImagePathToDB(new FeedImage(item.getGuid(), dirPath + "/" + fileName));
           }
 

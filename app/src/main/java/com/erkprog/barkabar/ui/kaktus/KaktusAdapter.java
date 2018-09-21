@@ -60,9 +60,9 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
       }
       if (item.getImgSource() != null) {
         if (item.isLocallyAvailable()) {
-          File f = new File(item.getImgSource());
+          Log.d(TAG, "onBindViewHolder: loading image from storage");
           Picasso.get()
-              .load(f)
+              .load(new File(item.getImgSource()))
               .error(R.drawable.ic_image_holder)
               .placeholder(R.drawable.ic_image_holder)
               .into(holder.image);
@@ -88,7 +88,6 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
         }
       });
     }
-
   }
 
   @Override
