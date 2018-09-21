@@ -14,7 +14,6 @@ import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.KaktusItem;
 import com.erkprog.barkabar.ui.OnClickListener;
 import com.erkprog.barkabar.util.DateFormatter;
-import com.erkprog.barkabar.util.ImageLoader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -74,7 +73,8 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
               .load(item.getImgSource())
               .error(R.drawable.ic_image_holder)
               .placeholder(R.drawable.ic_image_holder)
-              .into(new ImageLoader("kaktus", holder.image, item.getGuid(), mContext));
+//              .into(new ImageLoader("kaktus", holder.image, item.getGuid(), mContext));
+              .into(holder.image);
         }
       } else {
         holder.image.setVisibility(View.GONE);

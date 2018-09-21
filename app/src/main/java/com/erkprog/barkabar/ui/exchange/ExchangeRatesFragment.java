@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.erkprog.barkabar.AppApplication;
 import com.erkprog.barkabar.R;
-import com.erkprog.barkabar.data.db.AppDatabase;
 import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.ExchangeRatesResponse;
 import com.erkprog.barkabar.data.entity.room.CurrencyValues;
@@ -36,7 +35,8 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mPresenter = new ExRatesPresenter(ExRatesClient.getClient(), AppApplication.getInstance().getDatabase());
+    mPresenter = new ExRatesPresenter(ExRatesClient.getClient(), AppApplication.getInstance()
+        .getImageRepository().getDatabase());
     mPresenter.bind(this);
     mCurrencyValues = new CurrencyValues();
   }

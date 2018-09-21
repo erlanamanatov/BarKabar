@@ -37,7 +37,7 @@ public class ImageLoader implements Target {
     this.imageView = imageView;
     this.guid = guid;
     this.context = context;
-    mDatabase = AppApplication.getInstance().getDatabase();
+    mDatabase = AppApplication.getInstance().getImageRepository().getDatabase();
   }
 
   @Override
@@ -103,4 +103,5 @@ public class ImageLoader implements Target {
           }
         });
   }
+
 }

@@ -1,12 +1,11 @@
 package com.erkprog.barkabar.ui.kaktus;
 
 import android.util.Log;
-
-import com.erkprog.barkabar.data.db.AppDatabase;
 import com.erkprog.barkabar.data.entity.KaktusFeed;
 import com.erkprog.barkabar.data.entity.KaktusItem;
 import com.erkprog.barkabar.data.entity.room.FeedImage;
 import com.erkprog.barkabar.data.network.kaktusRepository.KaktusApi;
+import com.erkprog.barkabar.data.repository.ImageRepository;
 
 import java.util.List;
 
@@ -25,11 +24,11 @@ public class KaktusPresenter implements KaktusContract.Presenter {
 
   private KaktusContract.View mView;
   private KaktusApi mService;
-  private AppDatabase mDatabase;
+  private ImageRepository mRepository;
 
-  KaktusPresenter(KaktusApi service, AppDatabase database) {
+  KaktusPresenter(KaktusApi service, ImageRepository repository) {
     mService = service;
-    mDatabase = database;
+    mRepository = repository;
   }
 
 
@@ -85,10 +84,13 @@ public class KaktusPresenter implements KaktusContract.Presenter {
       public void run() throws Exception {
         Log.d(TAG, "checkForImagesInDB: items count from server: " + data.size());
         for (KaktusItem item : data) {
-          FeedImage mImage = mDatabase.imageDao().findById(item.getGuid());
+          FeedImage mImage = mRepository.getDatabase().imageDao().findById(item.getGuid());
           if (mImage != null) {
             item.setImgSource(mImage.getPath());
             item.setLocallyAvailable(true);
+          } else {
+            //downloadImage image
+            mRepository.downloadImage(item);
           }
         }
       }

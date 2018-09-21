@@ -57,7 +57,7 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View,
   }
 
   private void initPresenter() {
-    mPresenter = new KaktusPresenter(KaktusClient.getClient(), AppApplication.getInstance().getDatabase());
+    mPresenter = new KaktusPresenter(KaktusClient.getClient(), AppApplication.getInstance().getImageRepository());
     mPresenter.bind(this);
   }
 
