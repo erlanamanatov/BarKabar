@@ -15,11 +15,14 @@ public class KloopItem {
   @Element(name = "pubDate", required = false)
   private String createdDate;
 
-  @Element(name = "creator",data = true, required = false)
+  @Element(name = "creator", data = true, required = false)
   private String createdBy;
 
   @Element(name = "description", data = true, required = false)
   private String description;
+
+  @Element(name = "guid", required = false)
+  private String guid;
 
   public String getTitle() {
     return title;
@@ -59,5 +62,13 @@ public class KloopItem {
 
   public void setDescription(String description) {
     this.description = description;
+  }
+
+  public String getGuid() {
+    return guid;
+  }
+
+  public void setGuid(String guid) {
+    this.guid = guid;
   }
 }

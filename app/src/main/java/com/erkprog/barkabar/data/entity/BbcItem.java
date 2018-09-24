@@ -17,6 +17,9 @@ public class BbcItem {
   @Element(name = "link", required = false)
   private String link;
 
+  @Element(name = "guid", required = false)
+  private String guid;
+
 
   @Path("thumbnail")
   @Attribute(name = "url", required = false)
@@ -52,5 +55,13 @@ public class BbcItem {
 
   public void setImgUrl(String imgUrl) {
     this.imgUrl = imgUrl;
+  }
+
+  public String getGuid() {
+    return guid;
+  }
+
+  public void setGuid(String guid) {
+    this.guid = guid;
   }
 }

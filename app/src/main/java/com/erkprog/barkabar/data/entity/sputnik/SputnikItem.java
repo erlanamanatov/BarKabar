@@ -27,9 +27,8 @@ public class SputnikItem {
   @Attribute(name = "url", required = false)
   private String imgUrl;
 
-  public String getImgUrl() {
-    return imgUrl;
-  }
+  @Element(name = "guid", required = false)
+  private String guid;
 
   public String getTitle() {
     return title;
@@ -51,6 +50,10 @@ public class SputnikItem {
     return created;
   }
 
+  public void setCreated(String created) {
+    this.created = created;
+  }
+
   public String getDescription() {
     return description;
   }
@@ -61,5 +64,25 @@ public class SputnikItem {
 
   public String getCategory() {
     return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
+  }
+
+  public String getImgUrl() {
+    return imgUrl;
+  }
+
+  public void setImgUrl(String imgUrl) {
+    this.imgUrl = imgUrl;
+  }
+
+  public String getGuid() {
+    return guid;
+  }
+
+  public void setGuid(String guid) {
+    this.guid = guid;
   }
 }
