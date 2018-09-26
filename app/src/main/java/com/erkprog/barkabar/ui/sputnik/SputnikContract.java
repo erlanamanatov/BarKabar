@@ -1,12 +1,12 @@
 package com.erkprog.barkabar.ui.sputnik;
 
-import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
+import com.erkprog.barkabar.data.entity.SputnikItem;
 import com.erkprog.barkabar.ui.BasePresenter;
 import com.erkprog.barkabar.ui.BaseView;
 
 import java.util.List;
 
-public class SputnikContract {
+class SputnikContract {
 
   interface View extends BaseView {
 

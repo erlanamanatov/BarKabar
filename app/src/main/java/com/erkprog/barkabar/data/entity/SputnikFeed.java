@@ -1,5 +1,4 @@
-package com.erkprog.barkabar.data.entity.sputnik;
-
+package com.erkprog.barkabar.data.entity;
 
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.ElementList;

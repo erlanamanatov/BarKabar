@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.erkprog.barkabar.R;
-import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
+import com.erkprog.barkabar.data.entity.SputnikItem;
 import com.erkprog.barkabar.ui.OnClickListener;
 import com.erkprog.barkabar.util.DateFormatter;
 import com.squareup.picasso.Picasso;
@@ -87,7 +87,7 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
     TextView category;
     TextView created;
 
-    public SputnikViewHolder(View itemView) {
+    SputnikViewHolder(View itemView) {
       super(itemView);
 
       mImageView = itemView.findViewById(R.id.sp_item_image);

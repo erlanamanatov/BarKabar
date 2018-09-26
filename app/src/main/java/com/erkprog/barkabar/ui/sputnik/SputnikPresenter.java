@@ -2,8 +2,8 @@ package com.erkprog.barkabar.ui.sputnik;
 
 import android.util.Log;
 
-import com.erkprog.barkabar.data.entity.sputnik.SputnikFeed;
-import com.erkprog.barkabar.data.entity.sputnik.SputnikItem;
+import com.erkprog.barkabar.data.entity.SputnikFeed;
+import com.erkprog.barkabar.data.entity.SputnikItem;
 import com.erkprog.barkabar.data.network.sputnikRepository.SputnikApi;
 
 import java.util.List;

@@ -8,6 +8,9 @@ import android.support.annotation.NonNull;
 import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.KaktusItem;
 
+import java.util.Calendar;
+import java.util.Date;
+
 
 @Entity
 public class FeedItem {
@@ -19,6 +22,7 @@ public class FeedItem {
   private String description;
   private String imgPath;
   private String feedSource;
+  private Date savedDate;
 
   public FeedItem() {
 
@@ -31,6 +35,7 @@ public class FeedItem {
     this.description = item.getDescription() != null ? item.getDescription() : "";
     this.imgPath = item.getImgSource();
     this.feedSource = Defaults.KAKTUS_SOURCE_NAME;
+    savedDate = Calendar.getInstance().getTime();
   }
 
   public String getGuid() {
@@ -71,5 +76,13 @@ public class FeedItem {
 
   public void setFeedSource(String feedSource) {
     this.feedSource = feedSource;
+  }
+
+  public Date getSavedDate() {
+    return savedDate;
+  }
+
+  public void setSavedDate(Date savedDate) {
+    this.savedDate = savedDate;
   }
 }
