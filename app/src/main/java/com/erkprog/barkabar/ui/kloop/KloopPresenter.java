@@ -56,6 +56,11 @@ public class KloopPresenter implements KloopContract.Presenter {
   }
 
   @Override
+  public void deleteOldItemsInDB() {
+
+  }
+
+  @Override
   public void bind(KloopContract.View view) {
     mView = view;
   }

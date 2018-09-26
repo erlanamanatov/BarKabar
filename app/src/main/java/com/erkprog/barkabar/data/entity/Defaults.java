@@ -15,4 +15,6 @@ public class Defaults {
   public static final String EUR = "EUR";
   public static final String KZT = "KZT";
   public static final String RUB = "RUB";
+
+  public static final int FEED_ITEM_LIMIT = 30;
 }

@@ -63,6 +63,11 @@ public class BbcPresenter implements BbcContract.Presenter {
   }
 
   @Override
+  public void deleteOldItemsInDB() {
+
+  }
+
+  @Override
   public void bind(BbcContract.View view) {
     mView = view;
   }

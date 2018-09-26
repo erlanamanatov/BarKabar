@@ -80,6 +80,11 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
         });
   }
 
+  @Override
+  public void deleteOldItemsInDB() {
+
+  }
+
   private String getCurrentDate() {
     SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
     return formatter.format(Calendar.getInstance().getTime());
