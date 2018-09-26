@@ -1,11 +1,12 @@
 package com.erkprog.barkabar.ui.kaktus;
 
 import android.util.Log;
+
 import com.erkprog.barkabar.data.entity.KaktusFeed;
 import com.erkprog.barkabar.data.entity.KaktusItem;
-import com.erkprog.barkabar.data.entity.room.FeedImage;
+import com.erkprog.barkabar.data.entity.room.FeedItem;
 import com.erkprog.barkabar.data.network.kaktusRepository.KaktusApi;
-import com.erkprog.barkabar.data.repository.ImageRepository;
+import com.erkprog.barkabar.data.repository.LocalRepository;
 
 import java.util.List;
 
@@ -24,9 +25,9 @@ public class KaktusPresenter implements KaktusContract.Presenter {
 
   private KaktusContract.View mView;
   private KaktusApi mService;
-  private ImageRepository mRepository;
+  private LocalRepository mRepository;
 
-  KaktusPresenter(KaktusApi service, ImageRepository repository) {
+  KaktusPresenter(KaktusApi service, LocalRepository repository) {
     mService = service;
     mRepository = repository;
   }
@@ -54,7 +55,7 @@ public class KaktusPresenter implements KaktusContract.Presenter {
               Log.d(TAG, "onResponse: response successful");
 
               if (response.body().getData() != null && response.body().getData().size() != 0) {
-                checkForImagesInDB(response.body().getData());
+                checkItemsInDB(response.body().getData());
               } else {
                 Log.d(TAG, "onResponse: Data is null or size is 0");
               }
@@ -76,21 +77,23 @@ public class KaktusPresenter implements KaktusContract.Presenter {
     }
   }
 
-  private void checkForImagesInDB(final List<KaktusItem> data) {
-    Log.d(TAG, "checkForImagesInDB: starts");
+  private void checkItemsInDB(final List<KaktusItem> data) {
+    Log.d(TAG, "checkItemsInDB: starts");
 
     Completable.fromAction(new Action() {
       @Override
       public void run() throws Exception {
-        Log.d(TAG, "checkForImagesInDB: items count from server: " + data.size());
+        Log.d(TAG, "checkItemsInDB: items count from server: " + data.size());
         for (KaktusItem item : data) {
-          FeedImage mImage = mRepository.getDatabase().imageDao().findById(item.getGuid());
-          if (mImage != null) {
-            item.setImgSource(mImage.getPath());
+          FeedItem dbItem = mRepository.getDatabase().feedItemDao().findByGuid(item.getGuid());
+          if (dbItem != null) {
+            item.setImgSource(dbItem.getImgPath());
             item.setLocallyAvailable(true);
           } else {
-            //downloadImage image
-            mRepository.downloadImage(item);
+            if (item.getGuid() != null && item.getImgSource() != null) {
+              //downloadFeedItem image
+              mRepository.downloadFeedItem(item);
+            }
           }
         }
       }

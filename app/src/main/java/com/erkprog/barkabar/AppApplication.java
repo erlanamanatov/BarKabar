@@ -1,22 +1,20 @@
 package com.erkprog.barkabar;
 
 import android.app.Application;
-import android.arch.persistence.room.Room;
 
 import com.downloader.PRDownloader;
-import com.erkprog.barkabar.data.db.AppDatabase;
-import com.erkprog.barkabar.data.repository.ImageRepository;
+import com.erkprog.barkabar.data.repository.LocalRepository;
 
 public class AppApplication extends Application {
 
   private static AppApplication instance;
-  private ImageRepository mRepository;
+  private LocalRepository mRepository;
 
   @Override
   public void onCreate() {
     super.onCreate();
     instance = this;
-    mRepository = new ImageRepository(this);
+    mRepository = new LocalRepository(this);
     PRDownloader.initialize(getApplicationContext());
   }
 
@@ -24,7 +22,7 @@ public class AppApplication extends Application {
     return instance;
   }
 
-  public ImageRepository getImageRepository() {
+  public LocalRepository getImageRepository() {
     return mRepository;
   }
 }

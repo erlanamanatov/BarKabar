@@ -6,16 +6,13 @@ import android.os.Environment;
 import android.util.Log;
 
 import com.downloader.Error;
-import com.downloader.OnCancelListener;
 import com.downloader.OnDownloadListener;
-import com.downloader.OnPauseListener;
-import com.downloader.OnProgressListener;
-import com.downloader.OnStartOrResumeListener;
 import com.downloader.PRDownloader;
-import com.downloader.Progress;
 import com.erkprog.barkabar.data.db.AppDatabase;
+import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.KaktusItem;
 import com.erkprog.barkabar.data.entity.room.FeedImage;
+import com.erkprog.barkabar.data.entity.room.FeedItem;
 
 import java.io.File;
 
@@ -26,14 +23,14 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
 
-public class ImageRepository {
+public class LocalRepository {
 
-  private static final String TAG = "ImageRepository";
+  private static final String TAG = "LocalRepository";
 
   private AppDatabase mDatabase;
   private Context mContext;
 
-  public ImageRepository(Context context) {
+  public LocalRepository(Context context) {
     mDatabase = Room.databaseBuilder(context, AppDatabase.class, "db").build();
     mContext = context;
   }
@@ -42,44 +39,20 @@ public class ImageRepository {
     return mDatabase;
   }
 
-  public void downloadImage(final KaktusItem item) {
-    Log.d(TAG, "downloadImage image: " + item.getImgSource() + "\n" +
+  public void downloadFeedItem(final KaktusItem item) {
+    Log.d(TAG, "downloadFeedItem image: " + item.getImgSource() + "\n" +
         item.getTitle());
     final String dirPath = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
-    final String fileName = genName("kaktus");
+    final String fileName = genName(Defaults.KAKTUS_SOURCE_NAME);
     int downloadId = PRDownloader.download(item.getImgSource(), dirPath, fileName)
         .build()
-        .setOnStartOrResumeListener(new OnStartOrResumeListener() {
-          @Override
-          public void onStartOrResume() {
-
-          }
-        })
-        .setOnPauseListener(new OnPauseListener() {
-          @Override
-          public void onPause() {
-
-          }
-        })
-        .setOnCancelListener(new OnCancelListener() {
-          @Override
-          public void onCancel() {
-
-          }
-        })
-        .setOnProgressListener(new OnProgressListener() {
-          @Override
-          public void onProgress(Progress progress) {
-
-          }
-        })
         .start(new OnDownloadListener() {
           @Override
           public void onDownloadComplete() {
             Log.d(TAG, "onDownloadComplete: starting saving to DB");
             item.setLocallyAvailable(true);
             item.setImgSource(dirPath + "/" + fileName);
-            saveImagePathToDB(new FeedImage(item.getGuid(), dirPath + "/" + fileName));
+            saveFeedItemToDB(new FeedItem(item));
           }
 
           @Override
@@ -89,11 +62,11 @@ public class ImageRepository {
         });
   }
 
-  private void saveImagePathToDB(final FeedImage image) {
+  private void saveFeedItemToDB(final FeedItem item) {
     Completable.fromAction(new Action() {
       @Override
       public void run() throws Exception {
-        mDatabase.imageDao().addImage(image);
+        mDatabase.feedItemDao().addItem(item);
       }
     }).observeOn(AndroidSchedulers.mainThread())
         .subscribeOn(Schedulers.io())
@@ -104,12 +77,12 @@ public class ImageRepository {
 
           @Override
           public void onComplete() {
-            Log.d(TAG, "save imagePath to DB: onComplete: path saved to DB");
+            Log.d(TAG, "save FeedItem onComplete: saved to DB");
           }
 
           @Override
           public void onError(Throwable e) {
-            Log.d(TAG, "save imagePath to DB: onError: " + e.getMessage());
+            Log.d(TAG, "save FeedItem to DB: onError: " + e.getMessage());
           }
         });
   }

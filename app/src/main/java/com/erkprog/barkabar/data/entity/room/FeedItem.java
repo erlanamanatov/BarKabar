@@ -1,11 +1,18 @@
 package com.erkprog.barkabar.data.entity.room;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.support.annotation.NonNull;
+
+import com.erkprog.barkabar.data.entity.Defaults;
+import com.erkprog.barkabar.data.entity.KaktusItem;
+
 
 @Entity
 public class FeedItem {
 
+  @NonNull
   @PrimaryKey
   private String guid;
   private String title;
@@ -15,6 +22,15 @@ public class FeedItem {
 
   public FeedItem() {
 
+  }
+
+  @Ignore
+  public FeedItem(KaktusItem item) {
+    this.guid = item.getGuid();
+    this.title = item.getTitle();
+    this.description = item.getDescription() != null ? item.getDescription() : "";
+    this.imgPath = item.getImgSource();
+    this.feedSource = Defaults.KAKTUS_SOURCE_NAME;
   }
 
   public String getGuid() {

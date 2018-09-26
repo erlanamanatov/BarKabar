@@ -55,7 +55,7 @@ public class ImageLoader implements Target {
       FileOutputStream ostream = new FileOutputStream(file);
       bitmap.compress(Bitmap.CompressFormat.JPEG, 90, ostream);
       ostream.close();
-      saveImagePathToDB(new FeedImage(guid, file.getAbsolutePath()));
+//      saveImagePathToDB(new FeedImage(guid, file.getAbsolutePath()));
       Log.d(TAG, "onBitmapLoaded: ends");
     } catch (Exception e) {
       e.printStackTrace();
@@ -79,29 +79,29 @@ public class ImageLoader implements Target {
     return fileName;
   }
 
-  private void saveImagePathToDB(final FeedImage image) {
-    Completable.fromAction(new Action() {
-      @Override
-      public void run() throws Exception {
-        mDatabase.imageDao().addImage(image);
-      }
-    }).observeOn(AndroidSchedulers.mainThread())
-        .subscribeOn(Schedulers.io())
-        .subscribe(new CompletableObserver() {
-          @Override
-          public void onSubscribe(Disposable d) {
-          }
-
-          @Override
-          public void onComplete() {
-            Log.d(TAG, "save imagePath to DB: onComplete: path saved to DB");
-          }
-
-          @Override
-          public void onError(Throwable e) {
-            Log.d(TAG, "save imagePath to DB: onError: " + e.getMessage());
-          }
-        });
-  }
+//  private void saveImagePathToDB(final FeedImage image) {
+//    Completable.fromAction(new Action() {
+//      @Override
+//      public void run() throws Exception {
+//        mDatabase.imageDao().addImage(image);
+//      }
+//    }).observeOn(AndroidSchedulers.mainThread())
+//        .subscribeOn(Schedulers.io())
+//        .subscribe(new CompletableObserver() {
+//          @Override
+//          public void onSubscribe(Disposable d) {
+//          }
+//
+//          @Override
+//          public void onComplete() {
+//            Log.d(TAG, "save imagePath to DB: onComplete: path saved to DB");
+//          }
+//
+//          @Override
+//          public void onError(Throwable e) {
+//            Log.d(TAG, "save imagePath to DB: onError: " + e.getMessage());
+//          }
+//        });
+//  }
 
 }
