@@ -116,6 +116,7 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
 
             } else {
               Log.d(TAG, "onResponse: response is not successful or body is null");
+              mView.showErrorCurrencies();
             }
           }
         }
@@ -125,7 +126,6 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
           Log.d(TAG, "onFailure: " + t.getMessage());
           if (isAttached()) {
             mView.dismissProgress();
-            mView.showMessage(t.getMessage());
           }
         }
       });

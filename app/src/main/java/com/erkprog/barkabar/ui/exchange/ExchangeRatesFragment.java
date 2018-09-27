@@ -25,6 +25,7 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   private static final String TAG = "ExchangeRatesFragment";
 
   private ExRatesContract.Presenter mPresenter;
+  private TextView infoText;
   private TextView usdValue;
   private TextView eurValue;
   private TextView kztValue;
@@ -45,6 +46,7 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   @Override
   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
     View v = inflater.inflate(R.layout.fragment_exchange_rates, container, false);
+    infoText = v.findViewById(R.id.ex_rates_text);
     usdValue = v.findViewById(R.id.exch_usd_value);
     eurValue = v.findViewById(R.id.exch_eur_value);
     kztValue = v.findViewById(R.id.exch_kzt_value);
@@ -126,7 +128,7 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
 
   @Override
   public void showErrorCurrencies() {
-
+    infoText.setText(R.string.error_loading_data);
   }
 
   @Override
