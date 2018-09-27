@@ -37,6 +37,12 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
 
   @Override
   public void onBindViewHolder(@NonNull SputnikViewHolder holder, int position) {
+    holder.title.setText("");
+    holder.description.setText("");
+    holder.category.setText("");
+    holder.created.setText("");
+    holder.mImageView.setVisibility(View.GONE);
+
     if (mData != null) {
       final SputnikItem item = mData.get(position);
 
@@ -45,6 +51,7 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
         holder.description.setText(item.getDescription());
         holder.category.setText(item.getCategory());
         if (item.getImgUrl() != null) {
+          holder.mImageView.setVisibility(View.VISIBLE);
           Picasso.get()
               .load(item.getImgUrl())
               .placeholder(R.drawable.ic_image_holder)

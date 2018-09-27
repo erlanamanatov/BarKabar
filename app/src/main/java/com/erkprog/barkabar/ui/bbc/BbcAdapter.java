@@ -34,11 +34,16 @@ public class BbcAdapter extends RecyclerView.Adapter<BbcAdapter.BbcViewHolder> {
 
   @Override
   public void onBindViewHolder(@NonNull BbcViewHolder holder, int position) {
+    holder.title.setText("");
+    holder.description.setText("");
+    holder.image.setVisibility(View.GONE);
+
     final BbcItem item = mData.get(position);
     if (item != null) {
       holder.title.setText(item.getTitle());
       holder.description.setText(item.getDescription());
       if (item.getImgUrl() != null) {
+        holder.image.setVisibility(View.VISIBLE);
         Picasso.get()
             .load(item.getImgUrl())
             .error(R.drawable.ic_image_holder)

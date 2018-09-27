@@ -36,6 +36,11 @@ public class KloopAdapter extends RecyclerView.Adapter<KloopAdapter.KloopViewHol
 
   @Override
   public void onBindViewHolder(@NonNull KloopViewHolder holder, int position) {
+    holder.title.setText("");
+    holder.description.setText("");
+    holder.author.setText("");
+    holder.createdDate.setText("");
+
     final KloopItem item = mData.get(position);
 
     if (item != null) {
