@@ -91,3 +91,7 @@ public class MainActivity extends AppCompatActivity
 }
 
 //TODO: fix toolbar in exchange rates fragment
+//TODO: show something on load data error
+//TODO: change nav bar background
+//TODO: fix adapters in bbc, sputnik, kloop (imageview etc)
+//TODO: change sputnik item layout

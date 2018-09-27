@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_name">БарКабар</string>
+  <string name="action_settings">Настройки</string>
+  <string name="choose_tabs_order">Выберите порядок вкладок</string>
+  <string name="save">Сохранить</string>
+  <string name="new_order_saved">Новые значения сохранены</string>
+  <string name="unsaved_changes">Имеются несохраненные данные</string>
+  <string name="back_to_main">Вернуться на главный экран?</string>
+  <string name="news">Новости</string>
+  <string name="exchange_rates">Курсы валют</string>
+  <string name="official_exchange_rates">Официальные курсы валют НБКР</string>
+</resources>

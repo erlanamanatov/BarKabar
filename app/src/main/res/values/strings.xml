@@ -1,11 +1,11 @@
 <resources>
   <string name="app_name">BarKabar</string>
-  <string name="title_activity_main2">Main2Activity</string>
-  <string name="navigation_drawer_open">Open navigation drawer</string>
-  <string name="navigation_drawer_close">Close navigation drawer</string>
-  <string name="nav_header_title">Android Studio</string>
-  <string name="nav_header_subtitle">android.studio@android.com</string>
-  <string name="nav_header_desc">Navigation header</string>
+  <string name="title_activity_main2" translatable="false">Main2Activity</string>
+  <string name="navigation_drawer_open" translatable="false">Open navigation drawer</string>
+  <string name="navigation_drawer_close" translatable="false">Close navigation drawer</string>
+  <string name="nav_header_title" translatable="false">Android Studio</string>
+  <string name="nav_header_subtitle" translatable="false">android.studio@android.com</string>
+  <string name="nav_header_desc" translatable="false">Navigation header</string>
   <string name="action_settings">Settings</string>
   <string name="choose_tabs_order">Choose tabs order</string>
   <string name="save">Save</string>
@@ -15,8 +15,8 @@
   <string name="news">News</string>
   <string name="exchange_rates">Exchange rates</string>
   <string name="official_exchange_rates">Official exchange rates</string>
-  <string name="usd">USD</string>
-  <string name="eur">EUR</string>
-  <string name="kzt">KZT</string>
-  <string name="rub">RUB</string>
+  <string name="usd" translatable="false">USD</string>
+  <string name="eur" translatable="false">EUR</string>
+  <string name="kzt" translatable="false">KZT</string>
+  <string name="rub" translatable="false">RUB</string>
 </resources>
