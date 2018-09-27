@@ -9,17 +9,13 @@ import com.erkprog.barkabar.data.entity.room.FeedItem;
 import com.erkprog.barkabar.data.network.kaktusRepository.KaktusApi;
 import com.erkprog.barkabar.data.repository.LocalRepository;
 
-import java.io.File;
-import java.util.Iterator;
 import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
-import io.reactivex.observers.DisposableMaybeObserver;
 import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,7 +32,6 @@ public class KaktusPresenter implements KaktusContract.Presenter {
     mService = service;
     mRepository = repository;
   }
-
 
   @Override
   public boolean isAttached() {
@@ -83,42 +78,7 @@ public class KaktusPresenter implements KaktusContract.Presenter {
 
   @Override
   public void deleteOldItemsInDB() {
-    Completable.fromAction(new Action() {
-      @Override
-      public void run() throws Exception {
-        Log.d(TAG, "start checking items count in DB");
-
-        int count = mRepository.getDatabase().feedItemDao().getCount(Defaults.KAKTUS_SOURCE_NAME);
-        Log.d(TAG, "there are " + count + " items in DB");
-
-        if (count > Defaults.FEED_ITEM_LIMIT) {
-          List<FeedItem> itemsOverLimit = mRepository.getDatabase().feedItemDao()
-              .getFeedItemOverLimit(Defaults.KAKTUS_SOURCE_NAME, Defaults.FEED_ITEM_LIMIT);
-          Log.d(TAG, "items to be deleted: " + itemsOverLimit.size());
-
-          for (FeedItem item : itemsOverLimit) {
-            new File(item.getImgPath()).delete();
-            mRepository.getDatabase().feedItemDao().deleteFeedItem(item);
-          }
-        }
-      }
-    }).observeOn(AndroidSchedulers.mainThread())
-        .subscribeOn(Schedulers.io())
-        .subscribe(new CompletableObserver() {
-          @Override
-          public void onSubscribe(Disposable d) {
-          }
-
-          @Override
-          public void onComplete() {
-            Log.d(TAG, "onComplete: old items deleted from DB and storage");
-          }
-
-          @Override
-          public void onError(Throwable e) {
-            Log.d(TAG, "on Error {delete old items in DB} ");
-          }
-        });
+    mRepository.deleteOldItems(Defaults.KAKTUS_SOURCE_NAME);
   }
 
   private void checkItemsInDB(final List<KaktusItem> data) {
@@ -135,7 +95,7 @@ public class KaktusPresenter implements KaktusContract.Presenter {
             item.setLocallyAvailable(true);
           } else {
             if (item.getGuid() != null && item.getImgSource() != null) {
-              //downloadFeedItem image
+              //download FeedItem
               mRepository.downloadFeedItem(item);
             }
           }

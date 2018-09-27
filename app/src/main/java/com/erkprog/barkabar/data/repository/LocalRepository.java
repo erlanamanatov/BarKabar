@@ -15,6 +15,7 @@ import com.erkprog.barkabar.data.entity.room.FeedImage;
 import com.erkprog.barkabar.data.entity.room.FeedItem;
 
 import java.io.File;
+import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
@@ -97,5 +98,44 @@ public class LocalRepository {
     }
 
     return fileName;
+  }
+
+  public void deleteOldItems(final String feedSource) {
+    Completable.fromAction(new Action() {
+      @Override
+      public void run() throws Exception {
+        Log.d(TAG, "start checking items count in DB, source = " + feedSource);
+
+        int count = mDatabase.feedItemDao().getCount(feedSource);
+        Log.d(TAG, "there are " + count + " items in DB");
+
+        if (count > Defaults.FEED_ITEM_LIMIT) {
+          List<FeedItem> itemsOverLimit = mDatabase.feedItemDao()
+              .getFeedItemOverLimit(feedSource, Defaults.FEED_ITEM_LIMIT);
+          Log.d(TAG, "items to be deleted: " + itemsOverLimit.size());
+
+          for (FeedItem item : itemsOverLimit) {
+            new File(item.getImgPath()).delete();
+            mDatabase.feedItemDao().deleteFeedItem(item);
+          }
+        }
+      }
+    }).observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+          }
+
+          @Override
+          public void onComplete() {
+            Log.d(TAG, "onComplete: old items deleted from DB and storage");
+          }
+
+          @Override
+          public void onError(Throwable e) {
+            Log.d(TAG, "on Error {delete old items in DB} " + e.getMessage());
+          }
+        });
   }
 }
