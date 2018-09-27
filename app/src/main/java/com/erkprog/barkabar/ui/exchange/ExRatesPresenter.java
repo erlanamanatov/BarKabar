@@ -126,12 +126,14 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
           Log.d(TAG, "onFailure: " + t.getMessage());
           if (isAttached()) {
             mView.dismissProgress();
+            mView.showErrorCurrencies();
           }
         }
       });
     } else {
       Log.d(TAG, "getDataFromServer: service is null");
       mView.dismissProgress();
+      mView.showErrorCurrencies();
     }
   }
 
