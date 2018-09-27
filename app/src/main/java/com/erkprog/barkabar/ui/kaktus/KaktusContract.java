@@ -12,6 +12,8 @@ public interface KaktusContract {
     void showFeed(List<KaktusItem> data);
 
     void showArticle(String link);
+
+    void showErrorLoadingData();
   }
 
   interface Presenter extends BasePresenter<View> {

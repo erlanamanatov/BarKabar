@@ -33,4 +33,33 @@
       app:layout_constraintEnd_toEndOf="parent"
       app:layout_constraintStart_toStartOf="parent"
       app:layout_constraintTop_toTopOf="parent"/>
+
+  <TextView
+      android:id="@+id/kaktus_error_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="80dp"
+      android:elevation="10dp"
+      android:text="@string/error_loading_data"
+      android:textColor="@color/colorBlack"
+      android:textSize="@dimen/title_text_size"
+      android:textStyle="bold"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent"/>
+
+  <ImageView
+      android:id="@+id/kaktus_error_img"
+      android:layout_width="@dimen/error_img_size"
+      android:layout_height="@dimen/error_img_size"
+      android:layout_marginEnd="8dp"
+      android:layout_marginStart="8dp"
+      android:layout_marginTop="20dp"
+      android:elevation="10dp"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/kaktus_error_text"
+      app:srcCompat="@drawable/error"/>
 </android.support.constraint.ConstraintLayout>

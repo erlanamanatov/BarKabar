@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -31,11 +33,18 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View,
   private RecyclerView mRecyclerView;
   private KaktusAdapter mAdapter;
   private ProgressBar mProgressBar;
+  private TextView errorText;
+  private ImageView errorImage;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     initPresenter();
+  }
+
+  private void initPresenter() {
+    mPresenter = new KaktusPresenter(KaktusClient.getClient(), AppApplication.getInstance().getImageRepository());
+    mPresenter.bind(this);
   }
 
   @Nullable
@@ -45,7 +54,16 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View,
     initRecyclerView(v);
     mProgressBar = v.findViewById(R.id.kaktus_progress_bar);
     dismissProgress();
+    errorText = v.findViewById(R.id.kaktus_error_text);
+    errorImage = v.findViewById(R.id.kaktus_error_img);
+    hideError();
     return v;
+  }
+
+  private void initRecyclerView(View v) {
+    mRecyclerView = v.findViewById(R.id.kaktus_recycler_view);
+    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());
+    mRecyclerView.setLayoutManager(layoutManager);
   }
 
   @Override
@@ -56,17 +74,6 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View,
     mPresenter.deleteOldItemsInDB();
   }
 
-  private void initPresenter() {
-    mPresenter = new KaktusPresenter(KaktusClient.getClient(), AppApplication.getInstance().getImageRepository());
-    mPresenter.bind(this);
-  }
-
-  private void initRecyclerView(View v) {
-    mRecyclerView = v.findViewById(R.id.kaktus_recycler_view);
-    RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(requireContext());
-    mRecyclerView.setLayoutManager(layoutManager);
-  }
-
   @Override
   public void showFeed(List<KaktusItem> data) {
     mAdapter = new KaktusAdapter(data, this, requireContext());
@@ -74,9 +81,21 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View,
   }
 
   @Override
+  public void showErrorLoadingData() {
+    errorText.setVisibility(View.VISIBLE);
+    errorImage.setVisibility(View.VISIBLE);
+  }
+
+  private void hideError() {
+    errorImage.setVisibility(View.GONE);
+    errorText.setVisibility(View.GONE);
+  }
+
+  @Override
   public void showArticle(String link) {
     new FinestWebView.Builder(getActivity()).show(link);
   }
+
 
   @Override
   public void onDestroy() {

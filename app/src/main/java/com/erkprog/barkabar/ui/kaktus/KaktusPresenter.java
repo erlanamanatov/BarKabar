@@ -51,16 +51,14 @@ public class KaktusPresenter implements KaktusContract.Presenter {
           if (isAttached()) {
             mView.dismissProgress();
 
-            if (response.isSuccessful() && response.body() != null) {
-              Log.d(TAG, "onResponse: response successful");
+            if (response.isSuccessful() && response.body() != null
+                && response.body().getData() != null && response.body().getData().size() != 0) {
 
-              if (response.body().getData() != null && response.body().getData().size() != 0) {
-                checkItemsInDB(response.body().getData());
-              } else {
-                Log.d(TAG, "onResponse: Data is null or size is 0");
-              }
+              checkItemsInDB(response.body().getData());
+
             } else {
-              Log.d(TAG, "onResponse: response is not successful or body is null");
+              Log.d(TAG, "onResponse: check response || body || data ");
+              mView.showErrorLoadingData();
             }
           }
         }
@@ -70,6 +68,7 @@ public class KaktusPresenter implements KaktusContract.Presenter {
           if (isAttached()) {
             mView.dismissProgress();
             Log.d(TAG, "onFailure: " + t.getMessage());
+            mView.showErrorLoadingData();
           }
         }
       });
@@ -117,6 +116,7 @@ public class KaktusPresenter implements KaktusContract.Presenter {
           @Override
           public void onError(Throwable e) {
             Log.d(TAG, "checkForImages: onError: " + e.getMessage());
+            mView.showFeed(data);
           }
         });
   }
@@ -133,6 +133,8 @@ public class KaktusPresenter implements KaktusContract.Presenter {
 
   @Override
   public void onItemClick(KaktusItem item) {
-    mView.showArticle(item.getLink());
+    if (item.getLink() != null) {
+      mView.showArticle(item.getLink());
+    }
   }
 }
