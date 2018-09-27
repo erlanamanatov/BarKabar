@@ -19,4 +19,5 @@
   <string name="eur" translatable="false">EUR</string>
   <string name="kzt" translatable="false">KZT</string>
   <string name="rub" translatable="false">RUB</string>
+  <string name="error_loading_data">Error loading data</string>
 </resources>
