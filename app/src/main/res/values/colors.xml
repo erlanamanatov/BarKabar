@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#d1433a</color>
+  <color name="colorPrimary">#a02e2e</color>
   <color name="colorPrimaryDark">#a81513</color>
   <color name="colorAccent">#960000</color>
   <color name="mainAttributes">#000</color>
@@ -11,8 +11,9 @@
   <color name="kaktusItemColor">#87d882</color>
   <color name="sourceItemColor">#ffe591</color>
   <color name="bbcItemColor">#820303</color>
-  <color name="bbcBackground">#af2424</color>
+  <color name="bbcBackground">#a02e2e</color>
   <color name="dateAndCategory">#600000</color>
   <color name="colorBlack">#000</color>
   <color name="colorWhite">#FFF</color>
+  <color name="sideBarBackground">#6b1717</color>
 </resources>

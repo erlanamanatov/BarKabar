@@ -91,5 +91,4 @@ public class MainActivity extends AppCompatActivity
 }
 
 //TODO: fix toolbar in exchange rates fragment
-//TODO: show something on load data error
 //TODO: change nav bar background
