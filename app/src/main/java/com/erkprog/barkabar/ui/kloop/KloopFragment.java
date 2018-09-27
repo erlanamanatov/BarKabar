@@ -8,7 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -29,6 +31,8 @@ public class KloopFragment extends BaseFragment implements KloopContract.View,
   private RecyclerView mRecyclerView;
   private KloopAdapter mAdapter;
   private ProgressBar mProgressBar;
+  private TextView errorText;
+  private ImageView errorImage;
 
   private static final String TAG = "KloopFragment";
 
@@ -46,13 +50,10 @@ public class KloopFragment extends BaseFragment implements KloopContract.View,
     initRecyclerView(v);
     mProgressBar = v.findViewById(R.id.kloop_progress_bar);
     dismissProgress();
+    errorText = v.findViewById(R.id.kloop_error_text);
+    errorImage = v.findViewById(R.id.kloop_error_img);
+    hideError();
     return v;
-  }
-
-  @Override
-  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-    super.onViewCreated(view, savedInstanceState);
-    mPresenter.loadData();
   }
 
   private void initRecyclerView(View v) {
@@ -62,9 +63,26 @@ public class KloopFragment extends BaseFragment implements KloopContract.View,
   }
 
   @Override
+  public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    super.onViewCreated(view, savedInstanceState);
+    mPresenter.loadData();
+  }
+
+  @Override
   public void showFeed(List<KloopItem> data) {
     mAdapter = new KloopAdapter(data, this);
     mRecyclerView.setAdapter(mAdapter);
+  }
+
+  @Override
+  public void showErrorLoadingData() {
+    errorText.setVisibility(View.VISIBLE);
+    errorImage.setVisibility(View.VISIBLE);
+  }
+
+  private void hideError() {
+    errorImage.setVisibility(View.GONE);
+    errorText.setVisibility(View.GONE);
   }
 
   @Override

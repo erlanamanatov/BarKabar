@@ -35,10 +35,12 @@ public class KloopPresenter implements KloopContract.Presenter {
       public void onResponse(Call<KloopFeed> call, Response<KloopFeed> response) {
         if (isAttached()) {
           mView.dismissProgress();
-          if (response.isSuccessful() && response.body().getData() != null) {
+          if (response.isSuccessful() && response.body() != null
+              && response.body().getData() != null) {
             mView.showFeed(response.body().getData());
           } else {
-            Log.d(TAG, "onResponse:response is not successful or item list is null");
+            Log.d(TAG, "onResponse: check response || body || data");
+            mView.showErrorLoadingData();
           }
         }
       }
@@ -48,11 +50,10 @@ public class KloopPresenter implements KloopContract.Presenter {
         if (isAttached()) {
           mView.dismissProgress();
           Log.d(TAG, "onFailure: " + t.getMessage());
-          mView.showMessage(t.getMessage());
+          mView.showErrorLoadingData();
         }
       }
     });
-
   }
 
   @Override
@@ -72,6 +73,8 @@ public class KloopPresenter implements KloopContract.Presenter {
 
   @Override
   public void onItemClick(KloopItem item) {
-    mView.showArticle(item.getLink());
+    if (item.getLink() != null) {
+      mView.showArticle(item.getLink());
+    }
   }
 }

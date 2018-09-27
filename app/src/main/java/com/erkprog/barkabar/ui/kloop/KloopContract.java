@@ -13,6 +13,8 @@ class KloopContract {
     void showFeed(List<KloopItem> data);
 
     void showArticle(String url);
+
+    void showErrorLoadingData();
   }
 
   interface Presenter extends BasePresenter<View> {
