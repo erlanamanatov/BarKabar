@@ -1,6 +1,5 @@
 package com.erkprog.barkabar.ui.bbc;
 
-
 import android.util.Log;
 
 import com.erkprog.barkabar.data.entity.BbcFeed;
@@ -22,11 +21,6 @@ public class BbcPresenter implements BbcContract.Presenter {
   }
 
   @Override
-  public boolean isAttached() {
-    return mView != null;
-  }
-
-  @Override
   public void loadData() {
     if (mService != null) {
       mView.showProgress();
@@ -37,14 +31,12 @@ public class BbcPresenter implements BbcContract.Presenter {
           if (isAttached()) {
             mView.dismissProgress();
 
-            if (response.isSuccessful() && response.body() != null) {
-              if (response.body().getData() != null) {
-                mView.showFeed(response.body().getData());
-              } else {
-                mView.showMessage("Error loading data");
-              }
+            if (response.isSuccessful() && response.body() != null
+                && response.body().getData() != null) {
+              mView.showFeed(response.body().getData());
             } else {
-              Log.d(TAG, "onResponse: response is not successful or body is null");
+              mView.showErrorLoadingData();
+              Log.d(TAG, "onResponse: response is not successful or body is null or data is null");
             }
           }
         }
@@ -54,7 +46,7 @@ public class BbcPresenter implements BbcContract.Presenter {
           Log.d(TAG, "onFailure: " + t.getMessage());
           if (isAttached()) {
             mView.dismissProgress();
-            mView.showMessage(t.getMessage());
+            mView.showErrorLoadingData();
           }
         }
       });
@@ -73,6 +65,11 @@ public class BbcPresenter implements BbcContract.Presenter {
   }
 
   @Override
+  public boolean isAttached() {
+    return mView != null;
+  }
+
+  @Override
   public void unBind() {
     mView = null;
   }
@@ -81,8 +78,6 @@ public class BbcPresenter implements BbcContract.Presenter {
   public void onItemClick(BbcItem item) {
     if (item.getLink() != null) {
       mView.showArticle(item.getLink());
-    } else {
-      mView.showMessage("Article is not available");
     }
   }
 }

@@ -4,12 +4,16 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.Constraints;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -31,6 +35,8 @@ public class BbcFragment extends BaseFragment implements BbcContract.View, OnCli
   private RecyclerView mRecyclerView;
   private BbcAdapter mAdapter;
   private ProgressBar mProgressBar;
+  private TextView errorText;
+  private ImageView errorImage;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +58,14 @@ public class BbcFragment extends BaseFragment implements BbcContract.View, OnCli
     mRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
     mProgressBar = v.findViewById(R.id.bbc_progress_bar);
     dismissProgress();
+    errorText = v.findViewById(R.id.bbc_error_text);
+    errorImage = v.findViewById(R.id.bbc_error_img);
+    hideError();
+  }
+
+  private void hideError() {
+    errorImage.setVisibility(View.GONE);
+    errorText.setVisibility(View.GONE);
   }
 
   @Override
@@ -93,6 +107,12 @@ public class BbcFragment extends BaseFragment implements BbcContract.View, OnCli
   @Override
   public void showArticle(String link) {
     new FinestWebView.Builder(getActivity()).show(link);
+  }
+
+  @Override
+  public void showErrorLoadingData() {
+    errorText.setVisibility(View.VISIBLE);
+    errorImage.setVisibility(View.VISIBLE);
   }
 
   @Override

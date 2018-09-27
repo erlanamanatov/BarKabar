@@ -13,6 +13,8 @@ interface BbcContract {
     void showFeed(List<BbcItem> data);
 
     void showArticle(String link);
+
+    void showErrorLoadingData();
   }
 
   interface Presenter extends BasePresenter<View> {
