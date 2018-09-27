@@ -13,6 +13,8 @@ class SputnikContract {
     void showFeed(List<SputnikItem> items);
 
     void openArticle(String link);
+
+    void showErrorLoadingData();
   }
 
   interface Presenter extends BasePresenter<View> {

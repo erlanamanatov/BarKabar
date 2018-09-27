@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
@@ -32,6 +34,8 @@ public class SputnikFragment extends BaseFragment implements SputnikContract.Vie
   SputnikAdapter mAdapter;
   RecyclerView mRecyclerView;
   ProgressBar mProgressBar;
+  private TextView errorText;
+  private ImageView errorImage;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,6 +49,9 @@ public class SputnikFragment extends BaseFragment implements SputnikContract.Vie
     View v = inflater.inflate(R.layout.fragment_sputnik, container, false);
     mProgressBar = v.findViewById(R.id.sputnik_progress_bar);
     dismissProgress();
+    errorText = v.findViewById(R.id.sputnik_error_text);
+    errorImage = v.findViewById(R.id.sputnik_error_img);
+    hideError();
     initRecyclerView(v);
     return v;
   }
@@ -70,6 +77,17 @@ public class SputnikFragment extends BaseFragment implements SputnikContract.Vie
   public void showFeed(List<SputnikItem> items) {
     mAdapter = new SputnikAdapter(items, this);
     mRecyclerView.setAdapter(mAdapter);
+  }
+
+  @Override
+  public void showErrorLoadingData() {
+    errorImage.setVisibility(View.VISIBLE);
+    errorText.setVisibility(View.VISIBLE);
+  }
+
+  private void hideError() {
+    errorImage.setVisibility(View.GONE);
+    errorText.setVisibility(View.GONE);
   }
 
   @Override

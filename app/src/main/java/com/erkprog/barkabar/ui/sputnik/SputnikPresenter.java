@@ -31,22 +31,23 @@ public class SputnikPresenter implements SputnikContract.Presenter {
         public void onResponse(Call<SputnikFeed> call, Response<SputnikFeed> response) {
           if (isAttached()) {
             mView.dismissProgress();
-            if (response.isSuccessful()) {
-              if (response.body() != null && response.body().getChannel() != null) {
 
-                List<SputnikItem> data = response.body().getChannel().getItems();
-                if (data != null) {
-                  if (data.size() > 50) {
-                    data = data.subList(0, 50);
-                  }
-                  mView.showFeed(data);
-                } else {
-                  Log.d(TAG, "onResponse: List<SputnikItem> is null");
-                  mView.showMessage("Loading error");
+            if (response.isSuccessful() && response.body() != null
+                && response.body().getChannel() != null) {
+
+              List<SputnikItem> data = response.body().getChannel().getItems();
+              if (data != null) {
+                if (data.size() > 50) {
+                  data = data.subList(0, 50);
                 }
+                mView.showFeed(data);
+              } else {
+                Log.d(TAG, "onResponse: List<SputnikItem> is null");
+                mView.showErrorLoadingData();
               }
             } else {
-              Log.d(TAG, "onResponse: not successful");
+              Log.d(TAG, "onResponse: check response || body || channel ");
+              mView.showErrorLoadingData();
             }
           }
         }
@@ -56,9 +57,8 @@ public class SputnikPresenter implements SputnikContract.Presenter {
           if (isAttached()) {
             mView.dismissProgress();
             Log.d(TAG, "onFailure: " + t.getMessage());
-            mView.showMessage(t.getMessage());
+            mView.showErrorLoadingData();
           }
-
         }
       });
     }
@@ -72,7 +72,9 @@ public class SputnikPresenter implements SputnikContract.Presenter {
 
   @Override
   public void onItemClick(SputnikItem item) {
-    mView.openArticle(item.getLink());
+    if (item.getLink() != null) {
+      mView.openArticle(item.getLink());
+    }
   }
 
   @Override
