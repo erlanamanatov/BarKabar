@@ -39,7 +39,7 @@ public class SputnikPresenter implements SputnikContract.Presenter {
     mView.showProgress();
 
     DatabaseReference items = mDatabase.child("test");
-    items.addValueEventListener(new ValueEventListener() {
+    items.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
         mView.dismissProgress();
@@ -56,7 +56,9 @@ public class SputnikPresenter implements SputnikContract.Presenter {
 
       @Override
       public void onCancelled(@NonNull DatabaseError databaseError) {
-
+        mView.dismissProgress();
+        Log.d(TAG, "load data onCancelled, databaseError: " + databaseError.getMessage());
+        mView.showErrorLoadingData();
       }
     });
 
