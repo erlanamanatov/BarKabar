@@ -61,7 +61,7 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
 
         String date;
         try {
-          date = DateFormatter.getFormattedDate(item.getCreated());
+          date = DateFormatter.getFormattedDate(item.getPubDate());
         } catch (IllegalArgumentException e) {
           date = "";
         }

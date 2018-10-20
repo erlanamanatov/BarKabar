@@ -15,7 +15,7 @@ public class SputnikItem {
   private String link;
 
   @Element(name = "pubDate", required = false)
-  private String created;
+  private String pubDate;
 
   @Element(name = "description", required = false)
   private String description;
@@ -46,12 +46,12 @@ public class SputnikItem {
     this.link = link;
   }
 
-  public String getCreated() {
-    return created;
+  public String getPubDate() {
+    return pubDate;
   }
 
-  public void setCreated(String created) {
-    this.created = created;
+  public void setPubDate(String pubDate) {
+    this.pubDate = pubDate;
   }
 
   public String getDescription() {
@@ -84,5 +84,18 @@ public class SputnikItem {
 
   public void setGuid(String guid) {
     this.guid = guid;
+  }
+
+  @Override
+  public String toString() {
+    return "SputnikItem{" +
+        "title='" + title + '\'' +
+        ", link='" + link + '\'' +
+        ", pubDate='" + pubDate + '\'' +
+        ", description='" + description + '\'' +
+        ", category='" + category + '\'' +
+        ", imgUrl='" + imgUrl + '\'' +
+        ", guid='" + guid + '\'' +
+        '}';
   }
 }

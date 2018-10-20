@@ -1,11 +1,20 @@
 package com.erkprog.barkabar.ui.sputnik;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.erkprog.barkabar.data.entity.SputnikFeed;
 import com.erkprog.barkabar.data.entity.SputnikItem;
 import com.erkprog.barkabar.data.network.sputnikRepository.SputnikApi;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import retrofit2.Call;
@@ -17,51 +26,78 @@ public class SputnikPresenter implements SputnikContract.Presenter {
 
   private SputnikContract.View mView;
   private SputnikApi mService;
+  private DatabaseReference mDatabase;
+
 
   SputnikPresenter(SputnikApi service) {
     mService = service;
+    mDatabase = FirebaseDatabase.getInstance().getReference();
   }
 
   @Override
   public void loadData() {
     mView.showProgress();
-    if (mService != null) {
-      mService.loadSputnikRss().enqueue(new Callback<SputnikFeed>() {
-        @Override
-        public void onResponse(Call<SputnikFeed> call, Response<SputnikFeed> response) {
-          if (isAttached()) {
-            mView.dismissProgress();
 
-            if (response.isSuccessful() && response.body() != null
-                && response.body().getChannel() != null) {
-
-              List<SputnikItem> data = response.body().getChannel().getItems();
-              if (data != null) {
-                if (data.size() > 50) {
-                  data = data.subList(0, 50);
-                }
-                mView.showFeed(data);
-              } else {
-                Log.d(TAG, "onResponse: List<SputnikItem> is null");
-                mView.showErrorLoadingData();
-              }
-            } else {
-              Log.d(TAG, "onResponse: check response || body || channel ");
-              mView.showErrorLoadingData();
-            }
-          }
+    DatabaseReference items = mDatabase.child("test");
+    items.addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        mView.dismissProgress();
+        List<SputnikItem> data = new ArrayList<>();
+        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+          SputnikItem item = postSnapshot.getValue(SputnikItem.class);
+          Log.d(TAG, "onDataChange: " + item.toString());
+          data.add(item);
         }
 
-        @Override
-        public void onFailure(Call<SputnikFeed> call, Throwable t) {
-          if (isAttached()) {
-            mView.dismissProgress();
-            Log.d(TAG, "onFailure: " + t.getMessage());
-            mView.showErrorLoadingData();
-          }
-        }
-      });
-    }
+        Collections.reverse(data);
+        mView.showFeed(data);
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError databaseError) {
+
+      }
+    });
+
+
+//    if (mService != null) {
+//      mService.loadSputnikRss().enqueue(new Callback<SputnikFeed>() {
+//        @Override
+//        public void onResponse(Call<SputnikFeed> call, Response<SputnikFeed> response) {
+//          if (isAttached()) {
+//            mView.dismissProgress();
+//
+//            if (response.isSuccessful() && response.body() != null
+//                && response.body().getChannel() != null) {
+//
+//              List<SputnikItem> data = response.body().getChannel().getItems();
+//              if (data != null) {
+//                if (data.size() > 50) {
+//                  data = data.subList(0, 50);
+//                }
+//                mView.showFeed(data);
+//              } else {
+//                Log.d(TAG, "onResponse: List<SputnikItem> is null");
+//                mView.showErrorLoadingData();
+//              }
+//            } else {
+//              Log.d(TAG, "onResponse: check response || body || channel ");
+//              mView.showErrorLoadingData();
+//            }
+//          }
+//        }
+//
+//        @Override
+//        public void onFailure(Call<SputnikFeed> call, Throwable t) {
+//          if (isAttached()) {
+//            mView.dismissProgress();
+//            Log.d(TAG, "onFailure: " + t.getMessage());
+//            mView.showErrorLoadingData();
+//          }
+//        }
+//      });
+//    }
 
   }
 
