@@ -1,5 +1,6 @@
 package com.erkprog.barkabar.ui.exchange;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.erkprog.barkabar.data.db.AppDatabase;
@@ -7,6 +8,12 @@ import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.ExchangeRatesResponse;
 import com.erkprog.barkabar.data.entity.room.CurrencyValues;
 import com.erkprog.barkabar.data.network.exchangeRatesRepository.ExchangeRatesApi;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,10 +37,12 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
   private ExRatesContract.View mView;
   private ExchangeRatesApi mService;
   private AppDatabase mDatabase;
+  private DatabaseReference mFirebaseDatabase;
 
   ExRatesPresenter(ExchangeRatesApi api, AppDatabase database) {
     mService = api;
     mDatabase = database;
+    mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
   }
 
   @Override
@@ -91,54 +100,89 @@ public class ExRatesPresenter implements ExRatesContract.Presenter {
   }
 
   private void getDataFromServer() {
-    if (mService != null) {
 
-      mService.getExchangeRates().enqueue(new Callback<ExchangeRatesResponse>() {
-        @Override
-        public void onResponse(Call<ExchangeRatesResponse> call, Response<ExchangeRatesResponse> response) {
-          if (isAttached()) {
-            mView.dismissProgress();
+    DatabaseReference items = mFirebaseDatabase.child("exRates");
+    Query query = items.limitToLast(1);
+    query.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        if (isAttached()) {
+          mView.dismissProgress();
+          for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+            CurrencyValues values = postSnapshot.getValue(CurrencyValues.class);
 
-            if (response.isSuccessful() && response.body() != null) {
-
-              if (response.body().getDate() != null) {
-                mView.showDate(response.body().getDate());
-              } else {
-                mView.showErrorDate();
-              }
-
-              if (response.body().getCurrencyList() != null) {
-                saveCurrenciesToDB(response.body().getCurrencyList(), response.body().getDate());
-                mView.showCurrencies(response.body().getCurrencyList());
-              } else {
-                mView.showErrorCurrencies();
-              }
-
+            if (values.getDate() != null) {
+              mView.showDate(values.getDate());
             } else {
-              Log.d(TAG, "onResponse: response is not successful or body is null");
-              mView.showErrorCurrencies();
+              mView.showErrorDate();
             }
-          }
-        }
 
-        @Override
-        public void onFailure(Call<ExchangeRatesResponse> call, Throwable t) {
-          Log.d(TAG, "onFailure: " + t.getMessage());
-          if (isAttached()) {
-            mView.dismissProgress();
-            mView.showErrorCurrencies();
+            saveCurrenciesToDB(values);
+            mView.showCurrencies(formList(values));
           }
+
         }
-      });
-    } else {
-      Log.d(TAG, "getDataFromServer: service is null");
-      mView.dismissProgress();
-      mView.showErrorCurrencies();
-    }
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError databaseError) {
+        if (isAttached()) {
+          mView.dismissProgress();
+          Log.d(TAG, "load data onCancelled, databaseError: " + databaseError.getMessage());
+          mView.showErrorCurrencies();
+        }
+      }
+    });
+
+
+//    if (mService != null) {
+//
+//      mService.getExchangeRates().enqueue(new Callback<ExchangeRatesResponse>() {
+//        @Override
+//        public void onResponse(Call<ExchangeRatesResponse> call, Response<ExchangeRatesResponse> response) {
+//          if (isAttached()) {
+//            mView.dismissProgress();
+//
+//            if (response.isSuccessful() && response.body() != null) {
+//
+//              if (response.body().getDate() != null) {
+//                mView.showDate(response.body().getDate());
+//              } else {
+//                mView.showErrorDate();
+//              }
+//
+//              if (response.body().getCurrencyList() != null) {
+//                saveCurrenciesToDB(formCurrencyValues(response.body().getCurrencyList(),
+//                    response.body().getDate()));
+//                mView.showCurrencies(response.body().getCurrencyList());
+//              } else {
+//                mView.showErrorCurrencies();
+//              }
+//
+//            } else {
+//              Log.d(TAG, "onResponse: response is not successful or body is null");
+//              mView.showErrorCurrencies();
+//            }
+//          }
+//        }
+//
+//        @Override
+//        public void onFailure(Call<ExchangeRatesResponse> call, Throwable t) {
+//          Log.d(TAG, "onFailure: " + t.getMessage());
+//          if (isAttached()) {
+//            mView.dismissProgress();
+//            mView.showErrorCurrencies();
+//          }
+//        }
+//      });
+//    } else {
+//      Log.d(TAG, "getDataFromServer: service is null");
+//      mView.dismissProgress();
+//      mView.showErrorCurrencies();
+//    }
   }
 
-  private void saveCurrenciesToDB(List<ExchangeRatesResponse.Currency> currencies, String date) {
-    final CurrencyValues currencyValues = formCurrencyValues(currencies, date);
+  private void saveCurrenciesToDB(final CurrencyValues currencyValues) {
 
     Completable.fromAction(new Action() {
       @Override
