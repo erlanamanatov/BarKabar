@@ -1,5 +1,7 @@
 package com.erkprog.barkabar.data.entity;
 
+import com.google.firebase.database.PropertyName;
+
 import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Path;
@@ -29,26 +31,32 @@ public class KaktusItem {
 
   boolean locallyAvailable;
 
+  @PropertyName("title")
   public String getTitle() {
     return mTitle;
   }
 
+  @PropertyName("title")
   public void setTitle(String title) {
     mTitle = title;
   }
 
+  @PropertyName("link")
   public String getLink() {
     return mLink;
   }
 
+  @PropertyName("link")
   public void setLink(String link) {
     mLink = link;
   }
 
+  @PropertyName("pubDate")
   public String getCreatedDate() {
     return createdDate;
   }
 
+  @PropertyName("pubDate")
   public void setCreatedDate(String createdDate) {
     this.createdDate = createdDate;
   }
@@ -61,10 +69,12 @@ public class KaktusItem {
     this.description = description;
   }
 
+  @PropertyName("imgUrl")
   public String getImgSource() {
     return imgSource;
   }
 
+  @PropertyName("imgUrl")
   public void setImgSource(String imgSource) {
     this.imgSource = imgSource;
   }
@@ -89,6 +99,10 @@ public class KaktusItem {
   public String toString() {
     return "KaktusItem{" +
         "mTitle='" + mTitle + '\'' +
+        ", mLink='" + mLink + '\'' +
+        ", guid='" + guid + '\'' +
+        ", createdDate='" + createdDate + '\'' +
+        ", description='" + description + '\'' +
         ", imgSource='" + imgSource + '\'' +
         ", locallyAvailable=" + locallyAvailable +
         '}';

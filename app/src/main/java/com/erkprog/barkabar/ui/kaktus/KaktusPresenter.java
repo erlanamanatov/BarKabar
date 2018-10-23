@@ -1,5 +1,6 @@
 package com.erkprog.barkabar.ui.kaktus;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.erkprog.barkabar.data.entity.Defaults;
@@ -8,7 +9,15 @@ import com.erkprog.barkabar.data.entity.KaktusItem;
 import com.erkprog.barkabar.data.entity.room.FeedItem;
 import com.erkprog.barkabar.data.network.kaktusRepository.KaktusApi;
 import com.erkprog.barkabar.data.repository.LocalRepository;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -27,10 +36,12 @@ public class KaktusPresenter implements KaktusContract.Presenter {
   private KaktusContract.View mView;
   private KaktusApi mService;
   private LocalRepository mRepository;
+  private DatabaseReference mFirebaseDatabase;
 
   KaktusPresenter(KaktusApi service, LocalRepository repository) {
     mService = service;
     mRepository = repository;
+    mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
   }
 
   @Override
@@ -41,38 +52,70 @@ public class KaktusPresenter implements KaktusContract.Presenter {
   @Override
   public void loadData() {
     mView.showProgress();
-    if (mService != null) {
 
-      Log.d(TAG, "loadData: starting");
-
-      mService.loadKaktusFeed().enqueue(new Callback<KaktusFeed>() {
-        @Override
-        public void onResponse(Call<KaktusFeed> call, Response<KaktusFeed> response) {
-          if (isAttached()) {
-            mView.dismissProgress();
-
-            if (response.isSuccessful() && response.body() != null
-                && response.body().getData() != null && response.body().getData().size() != 0) {
-
-              checkItemsInDB(response.body().getData());
-
-            } else {
-              Log.d(TAG, "onResponse: check response || body || data ");
-              mView.showErrorLoadingData();
-            }
+    DatabaseReference items = mFirebaseDatabase.child("feed").child("kaktus");
+    Query query = items.orderByChild("id").limitToLast(20);
+    query.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        if (isAttached()) {
+          mView.dismissProgress();
+          List<KaktusItem> data = new ArrayList<>();
+          for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+            KaktusItem item = postSnapshot.getValue(KaktusItem.class);
+            Log.d(TAG, "onDataChange: " + item.toString());
+            data.add(item);
           }
-        }
 
-        @Override
-        public void onFailure(Call<KaktusFeed> call, Throwable t) {
-          if (isAttached()) {
-            mView.dismissProgress();
-            Log.d(TAG, "onFailure: " + t.getMessage());
-            mView.showErrorLoadingData();
-          }
+          Collections.reverse(data);
+          checkItemsInDB(data);
         }
-      });
-    }
+      }
+
+      @Override
+      public void onCancelled(@NonNull DatabaseError databaseError) {
+        if (isAttached()) {
+          mView.dismissProgress();
+          Log.d(TAG, "load data onCancelled, databaseError: " + databaseError.getMessage());
+          mView.showErrorLoadingData();
+        }
+      }
+    });
+
+
+
+//    if (mService != null) {
+//
+//      Log.d(TAG, "loadData: starting");
+//
+//      mService.loadKaktusFeed().enqueue(new Callback<KaktusFeed>() {
+//        @Override
+//        public void onResponse(Call<KaktusFeed> call, Response<KaktusFeed> response) {
+//          if (isAttached()) {
+//            mView.dismissProgress();
+//
+//            if (response.isSuccessful() && response.body() != null
+//                && response.body().getData() != null && response.body().getData().size() != 0) {
+//
+//              checkItemsInDB(response.body().getData());
+//
+//            } else {
+//              Log.d(TAG, "onResponse: check response || body || data ");
+//              mView.showErrorLoadingData();
+//            }
+//          }
+//        }
+//
+//        @Override
+//        public void onFailure(Call<KaktusFeed> call, Throwable t) {
+//          if (isAttached()) {
+//            mView.dismissProgress();
+//            Log.d(TAG, "onFailure: " + t.getMessage());
+//            mView.showErrorLoadingData();
+//          }
+//        }
+//      });
+//    }
   }
 
   @Override
