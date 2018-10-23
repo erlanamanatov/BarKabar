@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#a02e2e</color>
-  <color name="colorPrimaryDark">#a81513</color>
+  <color name="colorPrimary">#D32F2F</color>
+  <color name="colorPrimaryDark">#B71C1C</color>
   <color name="colorAccent">#960000</color>
   <color name="mainAttributes">#000</color>
   <color name="sputnikItemColor">#f2ba2e</color>
@@ -10,8 +10,8 @@
   <color name="kaktusBackground">#d1ffbf</color>
   <color name="kaktusItemColor">#87d882</color>
   <color name="sourceItemColor">#ffe591</color>
-  <color name="bbcItemColor">#820303</color>
-  <color name="bbcBackground">#a02e2e</color>
+  <color name="bbcItemColor">#660000</color>
+  <color name="bbcBackground">#930505</color>
   <color name="dateAndCategory">#600000</color>
   <color name="colorBlack">#000</color>
   <color name="colorWhite">#FFF</color>
