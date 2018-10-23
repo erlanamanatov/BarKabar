@@ -47,7 +47,7 @@ public class KloopAdapter extends RecyclerView.Adapter<KloopAdapter.KloopViewHol
       holder.title.setText(item.getTitle());
       holder.author.setText(item.getCreatedBy());
       String description = item.getDescription();
-      holder.description.setText(description != null ? Utils.getKloopDescription(description) : "");
+      holder.description.setText(description != null ? description : "");
 
       Log.d(TAG, "onBindViewHolder: date" + item.getCreatedDate());
       String date = item.getCreatedDate();

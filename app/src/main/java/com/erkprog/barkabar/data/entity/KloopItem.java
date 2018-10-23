@@ -1,5 +1,7 @@
 package com.erkprog.barkabar.data.entity;
 
+import com.google.firebase.database.PropertyName;
+
 import org.simpleframework.xml.Element;
 import org.simpleframework.xml.Root;
 
@@ -40,18 +42,22 @@ public class KloopItem {
     this.link = link;
   }
 
+  @PropertyName("pubDate")
   public String getCreatedDate() {
     return createdDate;
   }
 
+  @PropertyName("pubDate")
   public void setCreatedDate(String createdDate) {
     this.createdDate = createdDate;
   }
 
+  @PropertyName("creator")
   public String getCreatedBy() {
     return createdBy;
   }
 
+  @PropertyName("creator")
   public void setCreatedBy(String createdBy) {
     this.createdBy = createdBy;
   }
@@ -70,5 +76,17 @@ public class KloopItem {
 
   public void setGuid(String guid) {
     this.guid = guid;
+  }
+
+  @Override
+  public String toString() {
+    return "KloopItem{" +
+        "title='" + title + '\'' +
+        ", link='" + link + '\'' +
+        ", createdDate='" + createdDate + '\'' +
+        ", createdBy='" + createdBy + '\'' +
+        ", description='" + description + '\'' +
+        ", guid='" + guid + '\'' +
+        '}';
   }
 }

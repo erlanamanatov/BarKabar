@@ -38,27 +38,32 @@ public class SputnikPresenter implements SputnikContract.Presenter {
   public void loadData() {
     mView.showProgress();
 
-    DatabaseReference items = mDatabase.child("test");
-    items.addListenerForSingleValueEvent(new ValueEventListener() {
+    DatabaseReference items = mDatabase.child("feed").child("sputnik");
+    Query query = items.orderByChild("id").limitToLast(20);
+    query.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-        mView.dismissProgress();
-        List<SputnikItem> data = new ArrayList<>();
-        for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-          SputnikItem item = postSnapshot.getValue(SputnikItem.class);
-          Log.d(TAG, "onDataChange: " + item.toString());
-          data.add(item);
-        }
+        if (isAttached()) {
+          mView.dismissProgress();
+          List<SputnikItem> data = new ArrayList<>();
+          for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+            SputnikItem item = postSnapshot.getValue(SputnikItem.class);
+            Log.d(TAG, "onDataChange: " + item.toString());
+            data.add(item);
+          }
 
-        Collections.reverse(data);
-        mView.showFeed(data);
+          Collections.reverse(data);
+          mView.showFeed(data);
+        }
       }
 
       @Override
       public void onCancelled(@NonNull DatabaseError databaseError) {
-        mView.dismissProgress();
-        Log.d(TAG, "load data onCancelled, databaseError: " + databaseError.getMessage());
-        mView.showErrorLoadingData();
+        if (isAttached()) {
+          mView.dismissProgress();
+          Log.d(TAG, "load data onCancelled, databaseError: " + databaseError.getMessage());
+          mView.showErrorLoadingData();
+        }
       }
     });
 
