@@ -10,8 +10,6 @@ import com.downloader.OnDownloadListener;
 import com.downloader.PRDownloader;
 import com.erkprog.barkabar.data.db.AppDatabase;
 import com.erkprog.barkabar.data.entity.Defaults;
-import com.erkprog.barkabar.data.entity.KaktusItem;
-import com.erkprog.barkabar.data.entity.room.FeedImage;
 import com.erkprog.barkabar.data.entity.room.FeedItem;
 
 import java.io.File;
@@ -40,27 +38,61 @@ public class LocalRepository {
     return mDatabase;
   }
 
-  public void downloadFeedItem(final KaktusItem item) {
-//    Log.d(TAG, "downloadFeedItem image: " + item.getImgPath() + "\n" +
-//        item.getTitle());
-//    final String dirPath = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
-//    final String fileName = genName(Defaults.KAKTUS_SOURCE_NAME);
-//    int downloadId = PRDownloader.download(item.getImgPath(), dirPath, fileName)
-//        .build()
-//        .start(new OnDownloadListener() {
-//          @Override
-//          public void onDownloadComplete() {
-//            Log.d(TAG, "onDownloadComplete: starting saving to DB");
-//            item.setLocallyAvailable(true);
-//            item.getImgPath(dirPath + "/" + fileName);
-//            saveFeedItemToDB(new FeedItem(item));
-//          }
-//
-//          @Override
-//          public void onError(Error error) {
-//            Log.d(TAG, "onDownloadImageListener, onError: " + error.toString());
-//          }
-//        });
+  public void downloadFeedItem(final FeedItem item) {
+    Log.d(TAG, "downloadFeedItem image: " + item.getImgPath() + ", guid " + item.getGuid());
+    final String dirPath = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
+    final String fileName = genName(item.getFeedSource());
+    int downloadId = PRDownloader.download(item.getImgPath(), dirPath, fileName)
+        .build()
+        .start(new OnDownloadListener() {
+          @Override
+          public void onDownloadComplete() {
+            Log.d(TAG, "onDownloadComplete: start saving to DB " + item.getGuid());
+            item.setLocallyAvailable(true);
+            item.setImgPath(dirPath + "/" + fileName);
+            saveFeedItemToDB(item);
+          }
+
+          @Override
+          public void onError(Error error) {
+            Log.d(TAG, "onDownloadListener Error, item guid: " + item.getGuid()
+                + ", onError: " + error.toString());
+          }
+        });
+  }
+
+  public void checkItemInDB(final FeedItem item) {
+    Log.d(TAG, "checkItemInDB: starts, guid " + item.getGuid());
+
+    Completable.fromAction(new Action() {
+      @Override
+      public void run() throws Exception {
+          FeedItem dbItem = getDatabase().feedItemDao().findByGuid(item.getGuid());
+          if (dbItem != null) {
+            item.setImgPath(dbItem.getImgPath());
+            item.setLocallyAvailable(true);
+          } else {
+            if (item.getGuid() != null && item.getImgPath() != null) {
+              //download FeedItem
+              downloadFeedItem(item);
+            }
+          }
+        }
+    }).observeOn(AndroidSchedulers.mainThread())
+        .subscribeOn(Schedulers.io())
+        .subscribe(new CompletableObserver() {
+          @Override
+          public void onSubscribe(Disposable d) {
+          }
+
+          @Override
+          public void onComplete() {
+          }
+
+          @Override
+          public void onError(Throwable e) {
+          }
+        });
   }
 
   private void saveFeedItemToDB(final FeedItem item) {
@@ -78,12 +110,13 @@ public class LocalRepository {
 
           @Override
           public void onComplete() {
-            Log.d(TAG, "save FeedItem onComplete: saved to DB");
+            Log.d(TAG, "save FeedItem onComplete: item (guid " + item.getGuid() + ") saved to DB");
           }
 
           @Override
           public void onError(Throwable e) {
-            Log.d(TAG, "save FeedItem to DB: onError: " + e.getMessage());
+            Log.d(TAG, "save FeedItem to DB: onError: " + e.getMessage() + " , guid: "
+              + item.getGuid());
           }
         });
   }

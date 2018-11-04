@@ -1,6 +1,7 @@
 package com.erkprog.barkabar.data.entity.room;
 
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import com.google.firebase.database.PropertyName;
@@ -18,6 +19,8 @@ public class FeedItem {
   private String imgPath;
   private String feedSource;
   private Date savedDate;
+  @Ignore
+  private boolean isLocallyAvailable;
 
   public FeedItem() {
 
@@ -73,5 +76,13 @@ public class FeedItem {
 
   public void setSavedDate(Date savedDate) {
     this.savedDate = savedDate;
+  }
+
+  public boolean isLocallyAvailable() {
+    return isLocallyAvailable;
+  }
+
+  public void setLocallyAvailable(boolean locallyAvailable) {
+    isLocallyAvailable = locallyAvailable;
   }
 }

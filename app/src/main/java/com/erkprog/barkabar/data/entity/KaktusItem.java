@@ -15,8 +15,6 @@ public class KaktusItem extends FeedItem {
   @Element(name = "pubDate", required = false)
   String createdDate;
 
-  boolean locallyAvailable;
-
   @PropertyName("link")
   public String getLink() {
     return link;
@@ -37,14 +35,6 @@ public class KaktusItem extends FeedItem {
     this.createdDate = createdDate;
   }
 
-  public boolean isLocallyAvailable() {
-    return locallyAvailable;
-  }
-
-  public void setLocallyAvailable(boolean locallyAvailable) {
-    this.locallyAvailable = locallyAvailable;
-  }
-
   @Override
   public String toString() {
     return "KaktusItem{" +
@@ -54,7 +44,7 @@ public class KaktusItem extends FeedItem {
         ", createdDate='" + createdDate + '\'' +
         ", description='" + super.getDescription() + '\'' +
         ", imgSource='" + super.getImgPath() + '\'' +
-        ", locallyAvailable=" + locallyAvailable +
+        ", locallyAvailable=" + super.isLocallyAvailable() +
         '}';
   }
 }
