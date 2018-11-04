@@ -55,25 +55,24 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
         try {
           holder.date.setText(DateFormatter.getFormattedDate(item.getCreatedDate()));
         } catch (IllegalArgumentException e) {
-
+          Log.d(TAG, "onBindViewHolder: onBindViewHolder: date.setText: IllegalArgumentException");
         }
       }
-      if (item.getImgSource() != null) {
+      if (item.getImgPath() != null) {
         if (item.isLocallyAvailable()) {
           Log.d(TAG, "onBindViewHolder: loading image from storage");
           Picasso.get()
-              .load(new File(item.getImgSource()))
+              .load(new File(item.getImgPath()))
               .error(R.drawable.ic_image_holder)
               .placeholder(R.drawable.ic_image_holder)
               .into(holder.image);
         } else {
           Log.d(TAG, "onBindViewHolder: image not available from db, loading new from " +
-              item.getImgSource());
+              item.getImgPath());
           Picasso.get()
-              .load(item.getImgSource())
+              .load(item.getImgPath())
               .error(R.drawable.ic_image_holder)
               .placeholder(R.drawable.ic_image_holder)
-//              .into(new ImageLoader("kaktus", holder.image, item.getGuid(), mContext));
               .into(holder.image);
         }
       } else {

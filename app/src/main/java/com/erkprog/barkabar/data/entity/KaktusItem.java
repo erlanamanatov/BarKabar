@@ -1,54 +1,30 @@
 package com.erkprog.barkabar.data.entity;
 
+import com.erkprog.barkabar.data.entity.room.FeedItem;
 import com.google.firebase.database.PropertyName;
 
-import org.simpleframework.xml.Attribute;
 import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Path;
 import org.simpleframework.xml.Root;
 
 @Root(name = "item", strict = false)
-public class KaktusItem {
-
-  @Element(name = "title", data = true, required = false)
-  String mTitle;
+public class KaktusItem extends FeedItem {
 
   @Element(name = "link", required = false)
-  String mLink;
-
-  @Element(name = "guid", required = false)
-  String guid;
+  String link;
 
   @Element(name = "pubDate", required = false)
   String createdDate;
 
-  @Element(name = "description", data = true, required = false)
-  String description;
-
-  @Path("enclosure")
-  @Attribute(name = "url", required = false)
-  String imgSource;
-
   boolean locallyAvailable;
-
-  @PropertyName("title")
-  public String getTitle() {
-    return mTitle;
-  }
-
-  @PropertyName("title")
-  public void setTitle(String title) {
-    mTitle = title;
-  }
 
   @PropertyName("link")
   public String getLink() {
-    return mLink;
+    return link;
   }
 
   @PropertyName("link")
   public void setLink(String link) {
-    mLink = link;
+    this.link = link;
   }
 
   @PropertyName("pubDate")
@@ -59,32 +35,6 @@ public class KaktusItem {
   @PropertyName("pubDate")
   public void setCreatedDate(String createdDate) {
     this.createdDate = createdDate;
-  }
-
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
-  @PropertyName("imgUrl")
-  public String getImgSource() {
-    return imgSource;
-  }
-
-  @PropertyName("imgUrl")
-  public void setImgSource(String imgSource) {
-    this.imgSource = imgSource;
-  }
-
-  public String getGuid() {
-    return guid;
-  }
-
-  public void setGuid(String guid) {
-    this.guid = guid;
   }
 
   public boolean isLocallyAvailable() {
@@ -98,12 +48,12 @@ public class KaktusItem {
   @Override
   public String toString() {
     return "KaktusItem{" +
-        "mTitle='" + mTitle + '\'' +
-        ", mLink='" + mLink + '\'' +
-        ", guid='" + guid + '\'' +
+        "title='" + super.getTitle() + '\'' +
+        ", link='" + link + '\'' +
+        ", guid='" + super.getGuid() + '\'' +
         ", createdDate='" + createdDate + '\'' +
-        ", description='" + description + '\'' +
-        ", imgSource='" + imgSource + '\'' +
+        ", description='" + super.getDescription() + '\'' +
+        ", imgSource='" + super.getImgPath() + '\'' +
         ", locallyAvailable=" + locallyAvailable +
         '}';
   }

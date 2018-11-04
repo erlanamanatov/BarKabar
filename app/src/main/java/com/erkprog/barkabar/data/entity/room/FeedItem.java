@@ -1,14 +1,9 @@
 package com.erkprog.barkabar.data.entity.room;
 
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
-
-import com.erkprog.barkabar.data.entity.Defaults;
-import com.erkprog.barkabar.data.entity.KaktusItem;
-
-import java.util.Calendar;
+import com.google.firebase.database.PropertyName;
 import java.util.Date;
 
 
@@ -28,16 +23,6 @@ public class FeedItem {
 
   }
 
-  @Ignore
-  public FeedItem(KaktusItem item) {
-    this.guid = item.getGuid();
-    this.title = item.getTitle();
-    this.description = item.getDescription() != null ? item.getDescription() : "";
-    this.imgPath = item.getImgSource();
-    this.feedSource = Defaults.KAKTUS_SOURCE_NAME;
-    savedDate = Calendar.getInstance().getTime();
-  }
-
   public String getGuid() {
     return guid;
   }
@@ -46,10 +31,12 @@ public class FeedItem {
     this.guid = guid;
   }
 
+  @PropertyName("title")
   public String getTitle() {
     return title;
   }
 
+  @PropertyName("title")
   public void setTitle(String title) {
     this.title = title;
   }
@@ -62,10 +49,12 @@ public class FeedItem {
     this.description = description;
   }
 
+  @PropertyName("imgUrl")
   public String getImgPath() {
     return imgPath;
   }
 
+  @PropertyName("imgUrl")
   public void setImgPath(String imgPath) {
     this.imgPath = imgPath;
   }

@@ -22,24 +22,20 @@ import java.util.List;
 
 import io.reactivex.Completable;
 import io.reactivex.CompletableObserver;
+import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class KaktusPresenter implements KaktusContract.Presenter {
   private static final String TAG = "KaktusPresenter";
 
   private KaktusContract.View mView;
-  private KaktusApi mService;
   private LocalRepository mRepository;
   private DatabaseReference mFirebaseDatabase;
 
-  KaktusPresenter(KaktusApi service, LocalRepository repository) {
-    mService = service;
+  KaktusPresenter(LocalRepository repository) {
     mRepository = repository;
     mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
   }
@@ -68,7 +64,12 @@ public class KaktusPresenter implements KaktusContract.Presenter {
           }
 
           Collections.reverse(data);
-          checkItemsInDB(data);
+//          checkItemsInDB(data);
+
+          for (KaktusItem item: data) {
+            Log.d(TAG, "onDataChange: " + item.toString());
+          }
+          mView.showFeed(data);
         }
       }
 
@@ -81,41 +82,6 @@ public class KaktusPresenter implements KaktusContract.Presenter {
         }
       }
     });
-
-
-
-//    if (mService != null) {
-//
-//      Log.d(TAG, "loadData: starting");
-//
-//      mService.loadKaktusFeed().enqueue(new Callback<KaktusFeed>() {
-//        @Override
-//        public void onResponse(Call<KaktusFeed> call, Response<KaktusFeed> response) {
-//          if (isAttached()) {
-//            mView.dismissProgress();
-//
-//            if (response.isSuccessful() && response.body() != null
-//                && response.body().getData() != null && response.body().getData().size() != 0) {
-//
-//              checkItemsInDB(response.body().getData());
-//
-//            } else {
-//              Log.d(TAG, "onResponse: check response || body || data ");
-//              mView.showErrorLoadingData();
-//            }
-//          }
-//        }
-//
-//        @Override
-//        public void onFailure(Call<KaktusFeed> call, Throwable t) {
-//          if (isAttached()) {
-//            mView.dismissProgress();
-//            Log.d(TAG, "onFailure: " + t.getMessage());
-//            mView.showErrorLoadingData();
-//          }
-//        }
-//      });
-//    }
   }
 
   @Override
@@ -131,16 +97,16 @@ public class KaktusPresenter implements KaktusContract.Presenter {
       public void run() throws Exception {
         Log.d(TAG, "checkItemsInDB: items count from server: " + data.size());
         for (KaktusItem item : data) {
-          FeedItem dbItem = mRepository.getDatabase().feedItemDao().findByGuid(item.getGuid());
-          if (dbItem != null) {
-            item.setImgSource(dbItem.getImgPath());
-            item.setLocallyAvailable(true);
-          } else {
-            if (item.getGuid() != null && item.getImgSource() != null) {
-              //download FeedItem
-              mRepository.downloadFeedItem(item);
-            }
-          }
+//          FeedItem dbItem = mRepository.getDatabase().feedItemDao().findByGuid(item.getGuid());
+//          if (dbItem != null) {
+//            item.setImgSource(dbItem.getImgPath());
+//            item.setLocallyAvailable(true);
+//          } else {
+//            if (item.getGuid() != null && item.getImgSource() != null) {
+//              //download FeedItem
+//              mRepository.downloadFeedItem(item);
+//            }
+//          }
         }
       }
     }).observeOn(AndroidSchedulers.mainThread())

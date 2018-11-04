@@ -19,7 +19,6 @@ import com.erkprog.barkabar.AppApplication;
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.KaktusItem;
-import com.erkprog.barkabar.data.network.kaktusRepository.KaktusClient;
 import com.erkprog.barkabar.ui.BaseFragment;
 import com.erkprog.barkabar.ui.OnClickListener;
 import com.thefinestartist.finestwebview.FinestWebView;
@@ -43,7 +42,7 @@ public class KaktusFragment extends BaseFragment implements KaktusContract.View,
   }
 
   private void initPresenter() {
-    mPresenter = new KaktusPresenter(KaktusClient.getClient(), AppApplication.getInstance().getImageRepository());
+    mPresenter = new KaktusPresenter(AppApplication.getInstance().getImageRepository());
     mPresenter.bind(this);
   }
 

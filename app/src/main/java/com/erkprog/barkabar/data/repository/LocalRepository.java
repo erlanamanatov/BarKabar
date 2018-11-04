@@ -41,26 +41,26 @@ public class LocalRepository {
   }
 
   public void downloadFeedItem(final KaktusItem item) {
-    Log.d(TAG, "downloadFeedItem image: " + item.getImgSource() + "\n" +
-        item.getTitle());
-    final String dirPath = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
-    final String fileName = genName(Defaults.KAKTUS_SOURCE_NAME);
-    int downloadId = PRDownloader.download(item.getImgSource(), dirPath, fileName)
-        .build()
-        .start(new OnDownloadListener() {
-          @Override
-          public void onDownloadComplete() {
-            Log.d(TAG, "onDownloadComplete: starting saving to DB");
-            item.setLocallyAvailable(true);
-            item.setImgSource(dirPath + "/" + fileName);
-            saveFeedItemToDB(new FeedItem(item));
-          }
-
-          @Override
-          public void onError(Error error) {
-            Log.d(TAG, "onDownloadImageListener, onError: " + error.toString());
-          }
-        });
+//    Log.d(TAG, "downloadFeedItem image: " + item.getImgPath() + "\n" +
+//        item.getTitle());
+//    final String dirPath = mContext.getExternalFilesDir(Environment.DIRECTORY_PICTURES).getPath();
+//    final String fileName = genName(Defaults.KAKTUS_SOURCE_NAME);
+//    int downloadId = PRDownloader.download(item.getImgPath(), dirPath, fileName)
+//        .build()
+//        .start(new OnDownloadListener() {
+//          @Override
+//          public void onDownloadComplete() {
+//            Log.d(TAG, "onDownloadComplete: starting saving to DB");
+//            item.setLocallyAvailable(true);
+//            item.getImgPath(dirPath + "/" + fileName);
+//            saveFeedItemToDB(new FeedItem(item));
+//          }
+//
+//          @Override
+//          public void onError(Error error) {
+//            Log.d(TAG, "onDownloadImageListener, onError: " + error.toString());
+//          }
+//        });
   }
 
   private void saveFeedItemToDB(final FeedItem item) {
