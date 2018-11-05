@@ -2,6 +2,7 @@ package com.erkprog.barkabar.ui.sputnik;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +15,12 @@ import com.erkprog.barkabar.ui.OnClickListener;
 import com.erkprog.barkabar.util.DateFormatter;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikViewHolder> {
+
+  private static final String TAG = "SputnikAdapter";
 
   private List<SputnikItem> mData;
   private OnClickListener<SputnikItem> mlistener;
@@ -41,7 +45,7 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
     holder.description.setText("");
     holder.category.setText("");
     holder.created.setText("");
-    holder.mImageView.setVisibility(View.GONE);
+    holder.mImageView.setImageResource(R.drawable.ic_image_holder);
 
     if (mData != null) {
       final SputnikItem item = mData.get(position);
@@ -50,23 +54,35 @@ public class SputnikAdapter extends RecyclerView.Adapter<SputnikAdapter.SputnikV
         holder.title.setText(item.getTitle());
         holder.description.setText(item.getDescription());
         holder.category.setText(item.getCategory());
-        if (item.getImgUrl() != null) {
-          holder.mImageView.setVisibility(View.VISIBLE);
-          Picasso.get()
-              .load(item.getImgUrl())
-              .placeholder(R.drawable.ic_image_holder)
-              .error(R.drawable.ic_image_holder)
-              .into(holder.mImageView);
+        if (item.getImgPath() != null) {
+          if (item.isLocallyAvailable()) {
+            Log.d(TAG, "onBindViewHolder: load image from storage");
+            Picasso.get()
+                .load(new File(item.getImgPath()))
+                .error(R.drawable.ic_image_holder)
+                .placeholder(R.drawable.ic_image_holder)
+                .into(holder.mImageView);
+
+          } else {
+            Log.d(TAG, "onBindViewHolder: image not available from db, loading new from " +
+                item.getImgPath());
+            Picasso.get()
+                .load(item.getImgPath())
+                .placeholder(R.drawable.ic_image_holder)
+                .error(R.drawable.ic_image_holder)
+                .into(holder.mImageView);
+          }
+        } else {
+          holder.mImageView.setVisibility(View.GONE);
         }
 
-        String date;
-        try {
-          date = DateFormatter.getFormattedDate(item.getPubDate());
-        } catch (IllegalArgumentException e) {
-          date = "";
+        if (item.getPubDate() != null) {
+          try {
+            holder.created.setText(DateFormatter.getFormattedDate(item.getPubDate()));
+          } catch (IllegalArgumentException e) {
+            Log.d(TAG, "onBindViewHolder: date : illegalArgumentException");
+          }
         }
-
-        holder.created.setText(date);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
           @Override

@@ -1,47 +1,22 @@
 package com.erkprog.barkabar.data.entity;
 
-import org.simpleframework.xml.Attribute;
-import org.simpleframework.xml.Element;
-import org.simpleframework.xml.Path;
-import org.simpleframework.xml.Root;
+import com.erkprog.barkabar.data.entity.room.FeedItem;
+import com.google.firebase.database.PropertyName;
 
-@Root(name = "item", strict = false)
-public class SputnikItem {
+public class SputnikItem extends FeedItem {
 
-  @Element(name = "title", required = false)
-  private String title;
-
-  @Element(name = "link", required = false)
   private String link;
 
-  @Element(name = "pubDate", required = false)
   private String pubDate;
 
-  @Element(name = "description", required = false)
-  private String description;
-
-  @Element(name = "category", required = false)
   private String category;
 
-  @Path("enclosure")
-  @Attribute(name = "url", required = false)
-  private String imgUrl;
-
-  @Element(name = "guid", required = false)
-  private String guid;
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String title) {
-    this.title = title;
-  }
-
+  @PropertyName("link")
   public String getLink() {
     return link;
   }
 
+  @PropertyName("link")
   public void setLink(String link) {
     this.link = link;
   }
@@ -54,14 +29,6 @@ public class SputnikItem {
     this.pubDate = pubDate;
   }
 
-  public String getDescription() {
-    return description;
-  }
-
-  public void setDescription(String description) {
-    this.description = description;
-  }
-
   public String getCategory() {
     return category;
   }
@@ -70,32 +37,16 @@ public class SputnikItem {
     this.category = category;
   }
 
-  public String getImgUrl() {
-    return imgUrl;
-  }
-
-  public void setImgUrl(String imgUrl) {
-    this.imgUrl = imgUrl;
-  }
-
-  public String getGuid() {
-    return guid;
-  }
-
-  public void setGuid(String guid) {
-    this.guid = guid;
-  }
-
   @Override
   public String toString() {
     return "SputnikItem{" +
-        "title='" + title + '\'' +
+        "title='" + super.getTitle() + '\'' +
         ", link='" + link + '\'' +
         ", pubDate='" + pubDate + '\'' +
-        ", description='" + description + '\'' +
+        ", description='" + super.getDescription() + '\'' +
         ", category='" + category + '\'' +
-        ", imgUrl='" + imgUrl + '\'' +
-        ", guid='" + guid + '\'' +
+        ", imgUrl='" + super.getImgPath() + '\'' +
+        ", guid='" + super.getGuid() + '\'' +
         '}';
   }
 }

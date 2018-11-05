@@ -55,7 +55,7 @@ public class KaktusAdapter extends RecyclerView.Adapter<KaktusAdapter.KaktusView
         try {
           holder.date.setText(DateFormatter.getFormattedDate(item.getCreatedDate()));
         } catch (IllegalArgumentException e) {
-          Log.d(TAG, "onBindViewHolder: onBindViewHolder: date.setText: IllegalArgumentException");
+          Log.d(TAG, "onBindViewHolder: date.setText: IllegalArgumentException");
         }
       }
       if (item.getImgPath() != null) {
