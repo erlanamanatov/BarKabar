@@ -3,9 +3,9 @@ package com.erkprog.barkabar.ui.sputnik;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.erkprog.barkabar.data.entity.SputnikFeed;
+import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.SputnikItem;
-import com.erkprog.barkabar.data.network.sputnikRepository.SputnikApi;
+import com.erkprog.barkabar.data.repository.LocalRepository;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -17,28 +17,24 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 public class SputnikPresenter implements SputnikContract.Presenter {
   private static final String TAG = "SputnikPresenter";
 
   private SputnikContract.View mView;
-  private SputnikApi mService;
-  private DatabaseReference mDatabase;
+  private LocalRepository mRepository;
+  private DatabaseReference mFirebaseDatabase;
 
 
-  SputnikPresenter(SputnikApi service) {
-    mService = service;
-    mDatabase = FirebaseDatabase.getInstance().getReference();
+  SputnikPresenter(LocalRepository repository) {
+    mRepository = repository;
+    mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
   }
 
   @Override
   public void loadData() {
     mView.showProgress();
 
-    DatabaseReference items = mDatabase.child("feed").child("sputnik");
+    DatabaseReference items = mFirebaseDatabase.child("feed").child("sputnik");
     Query query = items.orderByChild("id").limitToLast(20);
     query.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
@@ -48,8 +44,12 @@ public class SputnikPresenter implements SputnikContract.Presenter {
           List<SputnikItem> data = new ArrayList<>();
           for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
             SputnikItem item = postSnapshot.getValue(SputnikItem.class);
-            Log.d(TAG, "onDataChange: " + item.toString());
-            data.add(item);
+            if (item != null) {
+              item.setFeedSource(Defaults.SPUTNIK_SOURCE_NAME);
+              mRepository.checkItemInDB(item);
+              Log.d(TAG, "onDataChange: " + item.toString());
+              data.add(item);
+            }
           }
 
           Collections.reverse(data);
@@ -66,51 +66,11 @@ public class SputnikPresenter implements SputnikContract.Presenter {
         }
       }
     });
-
-
-//    if (mService != null) {
-//      mService.loadSputnikRss().enqueue(new Callback<SputnikFeed>() {
-//        @Override
-//        public void onResponse(Call<SputnikFeed> call, Response<SputnikFeed> response) {
-//          if (isAttached()) {
-//            mView.dismissProgress();
-//
-//            if (response.isSuccessful() && response.body() != null
-//                && response.body().getChannel() != null) {
-//
-//              List<SputnikItem> data = response.body().getChannel().getItems();
-//              if (data != null) {
-//                if (data.size() > 50) {
-//                  data = data.subList(0, 50);
-//                }
-//                mView.showFeed(data);
-//              } else {
-//                Log.d(TAG, "onResponse: List<SputnikItem> is null");
-//                mView.showErrorLoadingData();
-//              }
-//            } else {
-//              Log.d(TAG, "onResponse: check response || body || channel ");
-//              mView.showErrorLoadingData();
-//            }
-//          }
-//        }
-//
-//        @Override
-//        public void onFailure(Call<SputnikFeed> call, Throwable t) {
-//          if (isAttached()) {
-//            mView.dismissProgress();
-//            Log.d(TAG, "onFailure: " + t.getMessage());
-//            mView.showErrorLoadingData();
-//          }
-//        }
-//      });
-//    }
-
   }
 
   @Override
   public void deleteOldItemsInDB() {
-
+    mRepository.deleteOldItems(Defaults.SPUTNIK_SOURCE_NAME);
   }
 
   @Override

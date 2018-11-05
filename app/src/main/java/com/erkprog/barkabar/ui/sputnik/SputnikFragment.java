@@ -15,10 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.erkprog.barkabar.AppApplication;
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.SputnikItem;
-import com.erkprog.barkabar.data.network.sputnikRepository.SputnikClient;
 import com.erkprog.barkabar.ui.BaseFragment;
 import com.erkprog.barkabar.ui.OnClickListener;
 import com.thefinestartist.finestwebview.FinestWebView;
@@ -63,7 +63,7 @@ public class SputnikFragment extends BaseFragment implements SputnikContract.Vie
   }
 
   private void initPresenter() {
-    mPresenter = new SputnikPresenter(SputnikClient.getClient(requireContext()));
+    mPresenter = new SputnikPresenter(AppApplication.getInstance().getLocalRepository());
     mPresenter.bind(this);
   }
 

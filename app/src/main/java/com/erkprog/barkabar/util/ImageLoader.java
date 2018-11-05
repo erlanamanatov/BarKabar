@@ -9,19 +9,11 @@ import android.widget.ImageView;
 
 import com.erkprog.barkabar.AppApplication;
 import com.erkprog.barkabar.data.db.AppDatabase;
-import com.erkprog.barkabar.data.entity.room.FeedImage;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.FileOutputStream;
-
-import io.reactivex.Completable;
-import io.reactivex.CompletableObserver;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Action;
-import io.reactivex.schedulers.Schedulers;
 
 public class ImageLoader implements Target {
   private static final String TAG = "ImageLoader";
@@ -37,7 +29,7 @@ public class ImageLoader implements Target {
     this.imageView = imageView;
     this.guid = guid;
     this.context = context;
-    mDatabase = AppApplication.getInstance().getImageRepository().getDatabase();
+    mDatabase = AppApplication.getInstance().getLocalRepository().getDatabase();
   }
 
   @Override

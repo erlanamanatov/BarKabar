@@ -22,7 +22,7 @@ public class AppApplication extends Application {
     return instance;
   }
 
-  public LocalRepository getImageRepository() {
+  public LocalRepository getLocalRepository() {
     return mRepository;
   }
 }

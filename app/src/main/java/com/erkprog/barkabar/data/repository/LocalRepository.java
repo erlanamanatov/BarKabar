@@ -13,6 +13,7 @@ import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.entity.room.FeedItem;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.List;
 
 import io.reactivex.Completable;
@@ -50,6 +51,7 @@ public class LocalRepository {
             Log.d(TAG, "onDownloadComplete: start saving to DB " + item.getGuid());
             item.setLocallyAvailable(true);
             item.setImgPath(dirPath + "/" + fileName);
+            item.setSavedDate(Calendar.getInstance().getTime());
             saveFeedItemToDB(item);
           }
 

@@ -37,7 +37,7 @@ public class ExchangeRatesFragment extends Fragment implements ExRatesContract.V
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     mPresenter = new ExRatesPresenter(ExRatesClient.getClient(), AppApplication.getInstance()
-        .getImageRepository().getDatabase());
+        .getLocalRepository().getDatabase());
     mPresenter.bind(this);
     mCurrencyValues = new CurrencyValues();
   }
