@@ -1,10 +1,22 @@
 package com.erkprog.barkabar.ui.bbc;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.erkprog.barkabar.data.entity.BbcFeed;
 import com.erkprog.barkabar.data.entity.BbcItem;
 import com.erkprog.barkabar.data.network.bbcRepository.BbcApi;
+import com.erkprog.barkabar.data.repository.LocalRepository;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -14,44 +26,48 @@ public class BbcPresenter implements BbcContract.Presenter {
   private static final String TAG = "BbcPresenter";
 
   private BbcContract.View mView;
-  private BbcApi mService;
+  private LocalRepository mRepository;
+  private DatabaseReference mFirebaseDatabase;
 
-  BbcPresenter(BbcApi service) {
-    mService = service;
+  BbcPresenter(LocalRepository repository) {
+    mRepository = repository;
+    mFirebaseDatabase = FirebaseDatabase.getInstance().getReference();
   }
 
   @Override
   public void loadData() {
-    if (mService != null) {
-      mView.showProgress();
+    mView.showProgress();
 
-      mService.loadBbcFeed().enqueue(new Callback<BbcFeed>() {
-        @Override
-        public void onResponse(Call<BbcFeed> call, Response<BbcFeed> response) {
-          if (isAttached()) {
-            mView.dismissProgress();
-
-            if (response.isSuccessful() && response.body() != null
-                && response.body().getData() != null) {
-              mView.showFeed(response.body().getData());
-            } else {
-              mView.showErrorLoadingData();
-              Log.d(TAG, "onResponse: response is not successful or body is null or data is null");
+    DatabaseReference items = mFirebaseDatabase.child("feed").child("bbc");
+    Query query = items.orderByChild("id").limitToLast(20);
+    query.addListenerForSingleValueEvent(new ValueEventListener() {
+      @Override
+      public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+        if (isAttached()) {
+          mView.dismissProgress();
+          List<BbcItem> data = new ArrayList<>();
+          for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+            BbcItem item = postSnapshot.getValue(BbcItem.class);
+            if (item != null) {
+              data.add(item);
             }
           }
+
+          Collections.reverse(data);
+          mView.showFeed(data);
         }
 
-        @Override
-        public void onFailure(Call<BbcFeed> call, Throwable t) {
-          Log.d(TAG, "onFailure: " + t.getMessage());
-          if (isAttached()) {
-            mView.dismissProgress();
-            mView.showErrorLoadingData();
-          }
-        }
-      });
-    }
+      }
 
+      @Override
+      public void onCancelled(@NonNull DatabaseError databaseError) {
+        if (isAttached()) {
+          mView.dismissProgress();
+          Log.d(TAG, " load data onCancelled: databaseError " + databaseError.getMessage());
+          mView.showErrorLoadingData();
+        }
+      }
+    });
   }
 
   @Override

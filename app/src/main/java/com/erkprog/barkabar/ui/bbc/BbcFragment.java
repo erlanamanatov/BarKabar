@@ -4,8 +4,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.Constraints;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -17,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.erkprog.barkabar.AppApplication;
 import com.erkprog.barkabar.R;
 import com.erkprog.barkabar.data.entity.BbcItem;
 import com.erkprog.barkabar.data.entity.Defaults;
@@ -41,7 +40,7 @@ public class BbcFragment extends BaseFragment implements BbcContract.View, OnCli
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    mPresenter = new BbcPresenter(BbcClient.getClient());
+    mPresenter = new BbcPresenter(AppApplication.getInstance().getLocalRepository());
     mPresenter.bind(this);
   }
 

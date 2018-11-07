@@ -20,6 +20,7 @@ public class BbcItem {
   @Element(name = "guid", required = false)
   private String guid;
 
+  private String pubDate;
 
   @Path("thumbnail")
   @Attribute(name = "url", required = false)
@@ -63,5 +64,13 @@ public class BbcItem {
 
   public void setGuid(String guid) {
     this.guid = guid;
+  }
+
+  public String getPubDate() {
+    return pubDate;
+  }
+
+  public void setPubDate(String pubDate) {
+    this.pubDate = pubDate;
   }
 }
