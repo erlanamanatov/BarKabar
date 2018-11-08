@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.erkprog.barkabar.data.entity.BbcItem;
+import com.erkprog.barkabar.data.entity.Defaults;
 import com.erkprog.barkabar.data.repository.LocalRepository;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -43,6 +44,8 @@ public class BbcPresenter implements BbcContract.Presenter {
           for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
             BbcItem item = postSnapshot.getValue(BbcItem.class);
             if (item != null) {
+              item.setFeedSource(Defaults.BBC_SOURCE_NAME);
+              mRepository.checkItemInDB(item);
               Log.d(TAG, "onDataChange: " + item.toString());
               data.add(item);
             }
@@ -67,7 +70,7 @@ public class BbcPresenter implements BbcContract.Presenter {
 
   @Override
   public void deleteOldItemsInDB() {
-
+    mRepository.deleteOldItems(Defaults.BBC_SOURCE_NAME);
   }
 
   @Override
