@@ -2,6 +2,7 @@ package com.erkprog.barkabar.ui.bbc;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +14,12 @@ import com.erkprog.barkabar.data.entity.BbcItem;
 import com.erkprog.barkabar.ui.OnClickListener;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 public class BbcAdapter extends RecyclerView.Adapter<BbcAdapter.BbcViewHolder> {
+
+  private static final String TAG = "BbcAdapter";
 
   private List<BbcItem> mData;
   private OnClickListener<BbcItem> mListener;
@@ -36,19 +40,31 @@ public class BbcAdapter extends RecyclerView.Adapter<BbcAdapter.BbcViewHolder> {
   public void onBindViewHolder(@NonNull BbcViewHolder holder, int position) {
     holder.title.setText("");
     holder.description.setText("");
-    holder.image.setVisibility(View.GONE);
+    holder.image.setImageResource(R.drawable.ic_image_holder);
 
     final BbcItem item = mData.get(position);
     if (item != null) {
       holder.title.setText(item.getTitle());
       holder.description.setText(item.getDescription());
       if (item.getImgPath() != null) {
-        holder.image.setVisibility(View.VISIBLE);
-        Picasso.get()
-            .load(item.getImgPath())
-            .error(R.drawable.ic_image_holder)
-            .placeholder(R.drawable.ic_image_holder)
-            .into(holder.image);
+        if (item.isLocallyAvailable()){
+          Log.d(TAG, "onBindViewHolder: load image from storage");
+          Picasso.get()
+              .load(new File(item.getImgPath()))
+              .error(R.drawable.ic_image_holder)
+              .placeholder(R.drawable.ic_image_holder)
+              .into(holder.image);
+        } else {
+          Log.d(TAG, "onBindViewHolder: image not available from db, loading new from " +
+              item.getImgPath());
+          Picasso.get()
+              .load(item.getImgPath())
+              .error(R.drawable.ic_image_holder)
+              .placeholder(R.drawable.ic_image_holder)
+              .into(holder.image);
+        }
+      } else {
+        holder.image.setVisibility(View.GONE);
       }
 
       holder.itemView.setOnClickListener(new View.OnClickListener() {
