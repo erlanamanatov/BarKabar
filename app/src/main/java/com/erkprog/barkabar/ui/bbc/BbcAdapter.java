@@ -42,10 +42,10 @@ public class BbcAdapter extends RecyclerView.Adapter<BbcAdapter.BbcViewHolder> {
     if (item != null) {
       holder.title.setText(item.getTitle());
       holder.description.setText(item.getDescription());
-      if (item.getImgUrl() != null) {
+      if (item.getImgPath() != null) {
         holder.image.setVisibility(View.VISIBLE);
         Picasso.get()
-            .load(item.getImgUrl())
+            .load(item.getImgPath())
             .error(R.drawable.ic_image_holder)
             .placeholder(R.drawable.ic_image_holder)
             .into(holder.image);

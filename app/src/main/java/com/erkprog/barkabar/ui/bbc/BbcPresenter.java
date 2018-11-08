@@ -3,9 +3,7 @@ package com.erkprog.barkabar.ui.bbc;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.erkprog.barkabar.data.entity.BbcFeed;
 import com.erkprog.barkabar.data.entity.BbcItem;
-import com.erkprog.barkabar.data.network.bbcRepository.BbcApi;
 import com.erkprog.barkabar.data.repository.LocalRepository;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -17,10 +15,6 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class BbcPresenter implements BbcContract.Presenter {
   private static final String TAG = "BbcPresenter";
@@ -49,6 +43,7 @@ public class BbcPresenter implements BbcContract.Presenter {
           for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
             BbcItem item = postSnapshot.getValue(BbcItem.class);
             if (item != null) {
+              Log.d(TAG, "onDataChange: " + item.toString());
               data.add(item);
             }
           }
