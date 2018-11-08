@@ -60,6 +60,7 @@ public class SputnikFragment extends BaseFragment implements SputnikContract.Vie
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     mPresenter.loadData();
+    mPresenter.deleteOldItemsInDB();
   }
 
   private void initPresenter() {

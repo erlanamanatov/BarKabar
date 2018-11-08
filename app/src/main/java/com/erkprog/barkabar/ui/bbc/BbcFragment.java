@@ -71,6 +71,7 @@ public class BbcFragment extends BaseFragment implements BbcContract.View, OnCli
   public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
     super.onViewCreated(view, savedInstanceState);
     mPresenter.loadData();
+    mPresenter.deleteOldItemsInDB();
   }
 
   public static BbcFragment newInstance() {
